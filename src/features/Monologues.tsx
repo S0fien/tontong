@@ -1,36 +1,7 @@
-import { ChevronLeft, ChevronRight, Play, RotateCcw } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-
-interface JsonEntry {
-  pivot: string;
-  transcript: string;
-  translation: string;
-  start: number;
-  end: number;
-  duration: number;
-}
-
-type CacheEntry = JsonEntry & {
-  audio: string;
-};
-
-interface Card {
-  id: string;
-  pivot: string;
-  transcript: string;
-  translation: string;
-  audio: string; // public URL to the audio file
-}
-
-interface IndexEntry {
-  id: string;
-  text: string;
-  translation: string;
-  audio: string; // public URL to the audio file
-  folder: string;
-  json: string;
-  files: string[];
-}
+import { Card } from "../components/Card";
+import type { CacheEntry, CardType, IndexEntry } from "../interfaces";
 
 const Monologues: React.FC = () => {
   // index.json (list of folders) and per-item cache
@@ -45,7 +16,7 @@ const Monologues: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const currentEntry = indexList[currentIndex];
-  const currentCard: Card | null =
+  const currentCard: CardType | null =
     currentEntry && itemsCache[currentEntry.id]
       ? {
           id: currentEntry.id,
@@ -187,71 +158,48 @@ const Monologues: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="flex flex-col justify-center items-center w-full h-fit">
       {/* Main Card */}
-      <div className="w-full max-w-4xl justify-center">
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-          {/* Card Content */}
-          <div className="p-12 min-h-[200px] flex flex-col justify-center">
-            <h2 className="text-4xl font-bold text-gray-800 mb-6">
-              {currentCard
-                ? currentCard.translation
-                : loadingItemId
-                ? "Loading..."
-                : "No data"}
-            </h2>
-            <p className="text-2xl text-gray-400">
-              {currentCard ? currentCard.pivot : ""}
-            </p>
-          </div>
+      <Card
+        loadingItemId={loadingItemId ?? ""}
+        currentCard={currentCard!}
+        handleReset={handleReset}
+      />
 
-          {/* Card Footer */}
-          <div className="bg-purple-100/50 p-6 flex justify-between items-center">
-            <div className="flex-1"></div>
-            <button
-              onClick={handleReset}
-              className="text-purple-400 hover:text-purple-600 transition p-2"
-              aria-label="Reset audio"
-            >
-              <RotateCcw className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
+      {/* Navigation Buttons */}
+      <div className="flex justify-center items-center mt-8 gap-8">
+        <button
+          onClick={handlePrevious}
+          className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
+          aria-label="Previous card"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-center items-center mt-8 gap-8">
-          <button
-            onClick={handlePrevious}
-            className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
-            aria-label="Previous card"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
+        <button
+          onClick={handlePlay}
+          className={`${
+            isPlaying ? "bg-purple-600" : "bg-white"
+          } hover:bg-purple-100 ${
+            isPlaying ? "text-white" : "text-purple-700"
+          } rounded-full p-4 shadow-xl transition transform hover:scale-110`}
+          aria-label={isPlaying ? "Pause audio" : "Play audio"}
+        >
+          <Play className="w-8 h-8" fill="currentColor" />
+        </button>
 
-          <button
-            onClick={handlePlay}
-            className={`${
-              isPlaying ? "bg-purple-600" : "bg-white"
-            } hover:bg-purple-100 ${
-              isPlaying ? "text-white" : "text-purple-700"
-            } rounded-full p-4 shadow-xl transition transform hover:scale-110`}
-            aria-label={isPlaying ? "Pause audio" : "Play audio"}
-          >
-            <Play className="w-8 h-8" fill="currentColor" />
-          </button>
+        <button
+          onClick={handleNext}
+          className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
+          aria-label="Next card"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
 
-          <button
-            onClick={handleNext}
-            className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
-            aria-label="Next card"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Progress Indicator */}
-        <div className="flex flex-col justify-center items-center gap-2 mt-8">
-          {/* {indexList.map((_, index) => (
+      {/* Progress Indicator */}
+      <div className="flex flex-col justify-center items-center gap-2 mt-8">
+        {/* {indexList.map((_, index) => (
             <DotIcon
               key={index}
               className={`h-2 rounded-full transition-all ${
@@ -259,10 +207,10 @@ const Monologues: React.FC = () => {
               }`}
             />
           ))} */}
-          <p>Entry {currentIndex}.</p>
-          <p>There is {indexList.length} entry.</p>
-        </div>
+        <p>Entry {currentIndex}.</p>
+        <p>There is {indexList.length} entry.</p>
       </div>
+      {/* </div> */}
 
       {/* Hidden Audio Element */}
       <audio
@@ -270,7 +218,7 @@ const Monologues: React.FC = () => {
         src={currentCard?.audio}
         onEnded={handleAudioEnded}
       />
-    </>
+    </div>
   );
 };
 
