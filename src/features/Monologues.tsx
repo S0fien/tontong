@@ -6,7 +6,7 @@ import type { CardType } from "../interfaces";
 
 const Monologues: React.FC = () => {
   // index.json (list of folders) and per-item cache
-  const { indexList, itemsCache, loadingIndex, loadingItemId } =
+  const { indexList, itemsCache, loadingIndex, loadingItemId, loadItem } =
     useOutputIndex();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -72,19 +72,24 @@ const Monologues: React.FC = () => {
   useEffect(() => {
     if (!currentEntry) return;
     if (itemsCache[currentEntry.id]) return; // already loaded
-  }, [currentEntry, itemsCache]);
+    loadItem(currentEntry.id);
+  }, [currentEntry, itemsCache, loadItem]);
 
-  if (loadingIndex) {
-    return <div className="text-white text-2xl">Loading...</div>;
-  }
+  // if (loadingIndex || !itemsCache[currentEntry.id]) {
+  //   return <div className="text-white text-2xl">Loading...</div>;
+  // }
 
   return (
     <div className="flex flex-col justify-center items-center w-full h-fit">
       {/* Main Card */}
-      <Card loadingItemId={loadingItemId ?? ""} currentCard={currentCard!} />
+      <Card
+        isLoading={loadingIndex || !itemsCache[currentEntry.id]}
+        loadingItemId={loadingItemId ?? ""}
+        currentCard={currentCard!}
+      />
 
       {/* Navigation Buttons */}
-      <div className="flex justify-between items-center mt-8 gap-8">
+      <div className="flex w-[500px] mx-auto justify-around items-center mt-8">
         <button
           onClick={handlePrevious}
           className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
@@ -115,7 +120,7 @@ const Monologues: React.FC = () => {
       </div>
 
       {/* Progress Indicator */}
-      <div className="flex flex-col justify-center items-center gap-2 mt-4">
+      <div className="flex flex-col fixed bottom-3  justify-center items-center gap-2 mt-4">
         {/* {indexList.map((_, index) => (
             <DotIcon
               key={index}

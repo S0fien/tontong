@@ -1,5 +1,6 @@
-import { LoaderCircle, Menu, MessageCircle, Play } from "lucide-react";
+import { Menu, MessageCircle, Play } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Loader } from "../components/Loader";
 import useOutputIndex from "../hooks/useOutputIndex";
 
 export default function History() {
@@ -82,7 +83,7 @@ export default function History() {
           <div className="flex items-center gap-3">
             <button
               disabled
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+              className="px-4 py-2 border  border-gray-300 rounded-md opacity-30 cursor-not-allowed text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
             >
               <Play className="w-4 h-4" />
               Play all
@@ -146,17 +147,7 @@ export default function History() {
               const french = cached ? cached.translation ?? "" : "";
               const literal = cached ? cached.pivot ?? "" : "";
 
-              if (!cached)
-                return (
-                  <div>
-                    <LoaderCircle
-                      size="20"
-                      color="purple"
-                      className="m-auto animate-spin"
-                    />
-                    ;
-                  </div>
-                );
+              if (!cached) return <Loader />;
               return (
                 <div
                   key={entry.id}
