@@ -6,11 +6,6 @@ export const Header = () => (
     <Link to="/">
       <HomeIcon />
     </Link>
-    <nav className="w-1/3 flex justify-around items-center">
-      <Link to="/monologues">Monologues</Link>
-      <Link to="/">History</Link>
-      <Link to="/">Account</Link>
-    </nav>
     <h1 className="text-white text-2xl font-serif italic">Tontong & Speak®</h1>
   </div>
 );
