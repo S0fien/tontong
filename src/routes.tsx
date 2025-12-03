@@ -1,5 +1,6 @@
 import { RootRoute, Route, Router } from "@tanstack/react-router";
 import App from "./App";
+import History from "./features/History";
 import Home from "./features/Home";
 import Monologues from "./features/Monologues";
 
@@ -22,8 +23,18 @@ const monologuesRoute = new Route({
   component: Monologues,
 });
 
+const historyRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/history",
+  component: History,
+});
+
 // Create the route tree
-const routeTree = rootRoute.addChildren([indexRoute, monologuesRoute]);
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  monologuesRoute,
+  historyRoute,
+]);
 
 // Create and export the router
 export const router = new Router({ routeTree });

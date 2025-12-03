@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint src --fix",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "tauri:win": "tauri build --runner cargo-xwin --target x86_64-pc-windows-msvc",
     "tauri:linux": "tauri build --target x86_64-unknown-linux-gnu"
   },

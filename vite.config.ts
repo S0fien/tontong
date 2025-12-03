@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     watch: {
       // glob pattern(s) or a function/regex accepted by chokidar
-      ignored: ["**/output/**", "**/.git/**"],
+      ignored: ["**/output/**", "**/.git/**", "**/src-tauri/**"],
     },
   },
 });
