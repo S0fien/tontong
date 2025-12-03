@@ -66,14 +66,6 @@ const Monologues: React.FC = () => {
     }
   };
 
-  const handleReset = (): void => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setIsPlaying(false);
-    }
-  };
-
   const handleAudioEnded = (): void => {
     setIsPlaying(false);
   };
@@ -160,14 +152,10 @@ const Monologues: React.FC = () => {
   return (
     <div className="flex flex-col justify-center items-center w-full h-fit">
       {/* Main Card */}
-      <Card
-        loadingItemId={loadingItemId ?? ""}
-        currentCard={currentCard!}
-        handleReset={handleReset}
-      />
+      <Card loadingItemId={loadingItemId ?? ""} currentCard={currentCard!} />
 
       {/* Navigation Buttons */}
-      <div className="flex justify-center items-center mt-8 gap-8">
+      <div className="flex justify-between items-center mt-8 gap-8">
         <button
           onClick={handlePrevious}
           className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
@@ -198,7 +186,7 @@ const Monologues: React.FC = () => {
       </div>
 
       {/* Progress Indicator */}
-      <div className="flex flex-col justify-center items-center gap-2 mt-8">
+      <div className="flex flex-col justify-center items-center gap-2 mt-4">
         {/* {indexList.map((_, index) => (
             <DotIcon
               key={index}
@@ -207,8 +195,9 @@ const Monologues: React.FC = () => {
               }`}
             />
           ))} */}
-        <p>Entry {currentIndex}.</p>
-        <p>There is {indexList.length} entry.</p>
+        <p>
+          Entry {currentIndex} on {indexList.length} entries.
+        </p>
       </div>
       {/* </div> */}
 
