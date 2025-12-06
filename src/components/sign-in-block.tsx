@@ -148,19 +148,16 @@ const SignInBlock = () => {
           <p className="text-sm text-red-600">{errors.password}</p>
         )}
       </div>
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Signing In..." : "Sign In"}
+      </Button>
     </form>
   );
 
-  const footer = (
-    <Button type="submit" className="w-full" disabled={isLoading}>
-      {isLoading ? "Signing In..." : "Sign In"}
-    </Button>
-  );
   return (
     <Card
       body={body}
       isLoading={isLoading}
-      footer={footer}
       className="w-full max-w-sm mx-auto flex flex-col gap-6"
     />
   );

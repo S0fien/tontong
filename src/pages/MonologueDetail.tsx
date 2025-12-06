@@ -9,7 +9,7 @@ import useOutputIndex from "../hooks/useOutputIndex";
 import type { CardType } from "../interfaces";
 
 const MonologueDetail = () => {
-  const { id: idParam } = useParams({ from: "/monologues/$id" });
+  const { id: idParam } = useParams({ strict: false });
 
   console.log("id param", idParam);
   const id = idParam || "A1-003-001";
@@ -80,7 +80,7 @@ const MonologueDetail = () => {
   };
 
   console.log(currentCard);
-  if (!currentEntry) {
+  if (!currentEntry || !idParam) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-purple-700 via-purple-600 to-pink-500">
         <div className="text-white text-2xl">Monologue not found</div>
