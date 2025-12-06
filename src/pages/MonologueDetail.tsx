@@ -2,6 +2,7 @@ import { useIsFetching } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Phonograph from "../components/Phonograph";
 import { Card } from "../components/ui/Card";
 import { CardBody } from "../components/ui/CardBody";
 import { CardFooter } from "../components/ui/CardFooter";
@@ -152,6 +153,8 @@ const MonologueDetail = () => {
           Monologue {currentIdx + 1} of {indexList.length}
         </p>
       </div>
+
+      <Phonograph phones={itemsCache[currentEntry.id]?.phones || []} />
 
       {/* Hidden Audio Element */}
       <audio

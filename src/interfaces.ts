@@ -6,6 +6,13 @@ export interface CardType {
   audio: string; // public URL to the audio file
 }
 
+export interface PhoneType {
+  phone: string;
+  start: number;
+  end: number;
+  duration: number;
+}
+
 export interface CardFooterProps {
   isLoading?: boolean;
   isFlipped?: boolean;
@@ -33,6 +40,7 @@ export interface JsonEntry {
 
 export type CacheEntry = JsonEntry & {
   audio: string;
+  phones: PhoneType[];
 };
 
 export interface IndexEntry {

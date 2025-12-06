@@ -1,11 +1,17 @@
 import { redirect, RootRoute, Route, Router } from "@tanstack/react-router";
 import App from "./App";
+import Grammar from "./pages/Grammar";
 import History from "./pages/History";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Monologues from "./pages/Monologues";
 import { useAppStore } from "./store";
 
+export const grammarRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/grammar",
+  component: Grammar,
+});
 // Root layout route
 export const rootRoute = new RootRoute({
   component: App,
@@ -69,6 +75,7 @@ const routeTree = rootRoute.addChildren([
   monologueDetailRoute,
   historyRoute,
   loginRoote,
+  grammarRoute,
 ]);
 
 // Create and export the router

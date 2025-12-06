@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "noImplicitAny": true,
+    "strict": false,
     "paths": {
       "@/*": ["./src/*"]
     }
