@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
-import type { IndexEntry } from "../interfaces";
+import type { CacheEntry, IndexEntry } from "../interfaces";
+import { supabase } from "../services/supabase";
 
-export type CacheMap = Record<string, any>;
+export type CacheMap = Record<string, CacheEntry>;
 
 export default function useOutputIndex() {
   const [indexList, setIndexList] = useState<IndexEntry[]>([]);
   const [itemsCache, setItemsCache] = useState<CacheMap>({});
   const [loadingIndex, setLoadingIndex] = useState<boolean>(true);
   const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let mounted = true;
     async function loadIndex() {
       try {
-        const indexResp = await fetch("/output/index.json");
-        if (!indexResp.ok)
-          throw new Error(`Failed to fetch index.json: ${indexResp.status}`);
-        const index = await indexResp.json();
+        const jo = await supabase.storage.from("monologues");
+        const { data } = await jo.getPublicUrl("index.json");
+        const truc = await fetch(data.publicUrl!, { method: "GET" });
+        const index = await truc.json();
         if (!mounted) return;
         setIndexList(index || []);
         setLoadingIndex(false);
@@ -26,10 +28,14 @@ export default function useOutputIndex() {
           setLoadingItemId(index[0].id);
           try {
             console.log("index", index);
-            const it = await fetch(`/output/${index[0].json}`);
-            if (it.ok) {
-              const d = await it.json();
-              if (mounted) setItemsCache((p) => ({ ...p, [index[0].id]: d }));
+            const { data } = await jo.getPublicUrl(index[0].json);
+            if (data.publicUrl) {
+              const aaa = await fetch(data.publicUrl!, { method: "GET" });
+              console.log("aaa", aaa);
+              const jo2 = await aaa.json();
+              console.log("jo2", jo2);
+
+              if (mounted) setItemsCache((p) => ({ ...p, [index[0].id]: jo2 }));
             }
           } catch (e: unknown) {
             console.error("error: ", e);
@@ -63,6 +69,7 @@ export default function useOutputIndex() {
   }
 
   async function loadItem(id: string) {
+    setLoading(true);
     console.log("list", indexList);
     if (!indexList || !indexList.length) return;
     console.log("first");
@@ -72,23 +79,29 @@ export default function useOutputIndex() {
     if (!entry || !entry.json) return;
     try {
       setLoadingItemId(id);
-      const res = await fetch(`output/${entry.json}`);
-      if (!res.ok)
-        throw new Error(`Failed to fetch ${entry.json}: ${res.status}`);
-      const data = await res.json();
-      console.log("res:", res, data);
+      const jo = await supabase.storage.from("monologues");
+
+      const { data } = await jo.getPublicUrl(
+        indexList.find((e) => e.id === id)!.json
+      );
+      const aaa = await fetch(data.publicUrl!, { method: "GET" });
+      console.log("aaa", aaa);
+      const jo2 = await aaa.json();
+
       setTimeout(() => {
         console.log("cache", itemsCache);
-        setItemsCache((p) => ({ ...p, [id]: data }));
+        setItemsCache((p) => ({ ...p, [id]: jo2 }));
       }, 500);
     } catch (err) {
       console.error("useOutputIndex loadItem failed", err);
     } finally {
       setLoadingItemId((curr) => (curr === id ? null : curr));
+      setLoading(false);
     }
   }
 
   return {
+    loading,
     indexList,
     itemsCache,
     loadingIndex,

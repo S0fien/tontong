@@ -8,7 +8,7 @@ import tseslint from "typescript-eslint";
 export default defineConfig([
   globalIgnores(["dist"]),
   {
-    files: ["src/**/*.{ts,tsx}"],
+    files: ["src/**/*.{ts,tsx}", "src"],
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
@@ -22,6 +22,5 @@ export default defineConfig([
     rules: {
       "@typescript-eslint/no-explicit-any": "warn",
     },
-    ignores: ["src-tauri/**", "./src-tauri"],
   },
 ]);

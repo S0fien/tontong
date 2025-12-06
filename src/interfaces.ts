@@ -6,7 +6,22 @@ export interface CardType {
   audio: string; // public URL to the audio file
 }
 
+export interface CardFooterProps {
+  isLoading?: boolean;
+  isFlipped?: boolean;
+  onFlip?: () => void;
+}
+export interface CardHeaderProps {
+  currentCard?: CardType | null;
+  loadingItemId?: string;
+  isLoading?: boolean;
+}
 
+export interface CardBodyProps {
+  currentCard?: CardType | null;
+  loadingItemId?: string;
+  isFlipped?: boolean;
+}
 export interface JsonEntry {
   pivot: string;
   transcript: string;
