@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "../services/supabase";
 import { useAppStore } from "../store";
@@ -28,6 +29,7 @@ const SignInBlock = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const { setUser, user } = useAppStore();
+  const navigate = useNavigate();
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -70,7 +72,7 @@ const SignInBlock = () => {
     });
     setUser({ userInfos: data.user!, session: data.session! });
     console.log("Registration response:", data);
-    // const navigate = useNavigate();
+    navigate({to: '/dashboard'});
     // const queryClient = useQueryClient();
 
     // return useMutation({

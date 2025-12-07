@@ -55,25 +55,25 @@ export default function Menu() {
           </Link>
 
           {/* Grammar Card */}
-          <div className="bg-white/25 cursor-not-allowed rounded-2xl p-3 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow ">
+          <Link
+            to="/grammar"
+            className="bg-white cursor-pointer rounded-2xl p-3 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow "
+          >
             <List className="w-10 h-10 text-purple-600 mb-2" strokeWidth={2} />
             <h3 className="text-base font-medium text-purple-600">Grammar</h3>
-          </div>
+          </Link>
         </div>
 
         {/* Dialogues - Large Card */}
-        <div className="bg-white/25 cursor-not-allowed rounded-2xl p-3 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow ">
-          <Smile className="w-10 h-10 text-purple-600 mb-4" strokeWidth={2} />
-          <h2 className="text-xl font-semibold text-purple-600">Dialogues</h2>
+        <div className="bg-white/25 text-gray-400  cursor-not-allowed rounded-2xl p-3 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow ">
+          <Smile className="w-10 h-10 mb-4" strokeWidth={2} />
+          <h2 className="text-xl font-semibold">Dialogues</h2>
         </div>
 
         {/* Contents Card */}
-        <div className="bg-white/25 cursor-not-allowed rounded-2xl p-3 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow ">
-          <FileText
-            className="w-10 h-10 text-purple-600 mb-2"
-            strokeWidth={2}
-          />
-          <h3 className="text-base font-medium text-purple-600">Contents</h3>
+        <div className="bg-white/25 text-gray-400 cursor-not-allowed rounded-2xl p-3 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow ">
+          <FileText className="w-10 h-10  mb-2" strokeWidth={2} />
+          <h3 className="text-base font-medium ">Contents</h3>
         </div>
       </div>
     </div>

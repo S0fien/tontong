@@ -17,7 +17,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
-  height: 100vh;
+  height: auto;
   min-height: 100vh;
 
   --radius: 8px;
@@ -78,8 +78,8 @@
 
 #root {
   width: 100%;
-  height: 100vh;
-  min-height: 100vh;
+  height: auto;
+  min-height: 100%;
 }
 /* a {
   font-weight: 500;
@@ -95,10 +95,10 @@ body {
   padding: 0;
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   /* place-items: center;
   min-width: 320px; */
-  min-height: 100vh;
+  min-height: inherit;
 }
 
 /* h1 {

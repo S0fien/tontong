@@ -81,7 +81,7 @@ const MonologueDetail = () => {
   };
 
   console.log(currentCard);
-  if (!currentEntry || !idParam) {
+  if (!currentEntry || !id) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-purple-700 via-purple-600 to-pink-500">
         <div className="text-white text-2xl">Monologue not found</div>
