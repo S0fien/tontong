@@ -104,8 +104,6 @@ const SignInBlock = () => {
         localStorage.setItem("rememberMe", "true");
       }
 
-      alert("Signed in successfully (demo only)");
-
       setIsLoading(false);
     }, 1000);
   };
@@ -119,7 +117,9 @@ const SignInBlock = () => {
       )}
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email" className="text-lg font-bold">
+          Email
+        </Label>
         <Input
           id="email"
           type="email"
@@ -133,7 +133,9 @@ const SignInBlock = () => {
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-lg font-bold">
+            Password
+          </Label>
         </div>
         <div className="flex items-center justify-between">
           <Input
@@ -165,7 +167,7 @@ const SignInBlock = () => {
     <Card
       body={body}
       isLoading={isLoading}
-      className="w-full max-w-sm mx-auto flex flex-col gap-6"
+      className="w-full max-w-sm mx-auto flex flex-col gap-6 bg-white/20"
     />
   );
 };

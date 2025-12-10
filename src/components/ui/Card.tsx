@@ -47,7 +47,7 @@ export const Card = ({
     : null;
   return (
     <div className="w-full max-w-2xl justify-center">
-      <div className="bg-white rounded-3xl shadow-2xl overflow-hidden perspective-[1000px]">
+      <div className="bg-white/70 rounded-3xl shadow-2xl overflow-hidden perspective-[1000px]">
         {Header}
 
         <div

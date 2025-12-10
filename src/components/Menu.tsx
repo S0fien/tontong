@@ -38,32 +38,26 @@ export default function Menu() {
         {/* Right Column - Small Cards */}
         <div className="flex flex-col gap-6">
           {/* History Card */}
-             <Link       to="/history"
- className="size-full">
-          <Button
-            variant={"brutal"}
-            className="rounded-2xl p-3 flex flex-col size-full items-center justify-center  cursor-pointer"
-          >
-      
+          <Link to="/history" className="size-full">
+            <Button
+              variant={"brutal"}
+              className="rounded-2xl p-3 flex flex-col size-full items-center justify-center  cursor-pointer"
+            >
               <History className="w-10 h-10 text-white mb-2" strokeWidth={2} />
               <h3 className="text-base font-medium text-white">History</h3>
-          </Button>
-                      </Link>
+            </Button>
+          </Link>
 
           {/* Grammar Card */}
-          <Link       to="/grammar"
- className="size-full">
-          <Button
-            variant={"brutal"}
-            className="rounded-2xl p-3 flex flex-col size-full items-center justify-center  cursor-pointer"
-          >
-    
-           
+          <Link to="/grammar" className="size-full">
+            <Button
+              variant={"brutal"}
+              className="rounded-2xl p-3 flex flex-col size-full items-center justify-center  cursor-pointer"
+            >
               <List className="w-10 h-10 text-white mb-2" strokeWidth={2} />
               <h3 className="text-base font-medium text-white">Grammar</h3>
-          </Button>
-                      </Link>
-
+            </Button>
+          </Link>
         </div>
 
         {/* Dialogues - Large Card */}

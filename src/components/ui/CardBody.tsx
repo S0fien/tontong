@@ -16,14 +16,14 @@ export const CardBody = ({
         }`}
       >
         <div className="px-8 py-4">
-          <h2 className="text-3xl text-purple-600 mb-3 leading-relaxed font-bold">
+          <h2 className="text-3xl text-purple-800 mb-3 leading-relaxed font-bold">
             {audio
               ? audio.translation
               : loadingItemId
                 ? "Loading..."
                 : "No data"}
           </h2>
-          <p className="text-1xl text-gray-400 italic">
+          <p className="text-1xl pl-3 text-gray-800 italic">
             {audio ? audio.pivot : ""}
           </p>
         </div>

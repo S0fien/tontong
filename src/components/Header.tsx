@@ -9,17 +9,15 @@ export const Header = () => {
   const setUser = useAppStore((state) => state.setUser);
 
   return (
-    <div className="w-full h-[10vh]  p-3 flex justify-between items-center">
-      <Button variant={"brutal"} className="p-4 m-4">
-        <Link to="/" className={`my-4 ${!user && "hidden"}`}>
+    <div className="w-full h-[10vh] p-3 flex justify-between items-center">
+      <Link to="/" className={`my-4 ${!user && "hidden"}`}>
+        <Button variant={"brutal"} className="p-4 m-4">
           <House className="text-white size-7 " />
-        </Link>
-      </Button>
+        </Button>
+      </Link>
 
       <div className="w-full flex justify-center">
-        <span className="text-white text-2xl font-serif font-thin">
-          TontongSpeak®
-        </span>
+        <span className="text-white text-2xl font-bold">TONTONGSPEAK</span>
       </div>
       {user && (
         <Button

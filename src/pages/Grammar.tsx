@@ -1,5 +1,4 @@
 import { AccordionContent } from "@radix-ui/react-accordion";
-import { useNavigate, useParams } from "@tanstack/react-router";
 import {
   BookOpen,
   CheckCircle,
@@ -41,9 +40,6 @@ const ddsq = Array.from(
 
 const Grammar = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const navigate = useNavigate();
-  const params = useParams({ strict: false });
-  console.log("params", params);
   const [completedTopics, setCompletedTopics] = useState(new Set());
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -108,12 +104,10 @@ const Grammar = () => {
               return (
                 <Button
                   onClick={() => {
-                    navigate({
-                      to: "/grammar",
-                      hash: "grammar" + indox,
-                      resetScroll: false,
-                      viewTransition: true,
-                      hashScrollIntoView: { behavior: "smooth" },
+                    document.getElementById("grammar" + indox)?.scrollIntoView({
+                      inline: "start",
+                      block: "center",
+                      behavior: "smooth",
                     });
                   }}
                 >
