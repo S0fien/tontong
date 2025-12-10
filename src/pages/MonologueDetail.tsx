@@ -19,6 +19,7 @@ const MonologueDetail = () => {
     itemsCache,
     loadItem,
     setCurrentEntry,
+    loadingIndex,
     currentEntry,
     loadingItemId,
   } = useOutputIndex();
@@ -54,9 +55,10 @@ const MonologueDetail = () => {
     loadItem(loadingItemId);
   }, [currentEntry, itemsCache, loadItem, loadingItemId]);
 
-  useEffect(() =>
-    setCurrentEntry(indexList.find((item) => item.id === id) || indexList[0]),
-  );
+  useEffect(() => {
+    if (!loadingIndex)
+      setCurrentEntry(indexList.find((item) => item.id === id) || indexList[0]);
+  }, [id, indexList, loadingIndex, setCurrentEntry]);
 
   const handlePrevious = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);

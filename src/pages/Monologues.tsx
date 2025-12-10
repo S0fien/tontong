@@ -7,7 +7,7 @@ const Monologue = () => {
   const { indexList, loadingIndex } = useOutputIndex();
   const { navigate } = useRouter();
   useEffect(() => {
-    if (!loadingIndex)
+    if (!loadingIndex && indexList[0])
       navigate({ to: "/monologues/" + indexList[0].id, reloadDocument: true });
   }, [indexList, loadingIndex, navigate]);
   if (loadingIndex)

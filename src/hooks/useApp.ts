@@ -100,9 +100,7 @@ export function useOutputIndex() {
         if (index && index[0] && index[0].json) {
           setLoadingItemId(index[0].id);
           try {
-            const { data } = await jo.getPublicUrl(
-              index[0].json!.replace("-data.json", ""),
-            );
+            const { data } = await jo.getPublicUrl(index[0].json!);
             console.log("data", data);
             if (data.publicUrl) {
               console.log("data", data.publicUrl);
@@ -161,7 +159,7 @@ export function useOutputIndex() {
       const { data } = await jo.getPublicUrl(
         indexList.find((e) => e.id === id)!.audio.json,
       );
-      const formattedUrl = data.publicUrl!.replace("-data.json", "");
+      const formattedUrl = data.publicUrl!;
       console.log("formated", formattedUrl);
       const aaa = await fetch(formattedUrl, { method: "GET" });
       const jo2 = await aaa.json();
