@@ -2,7 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Menu, MessageCircle, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Loader } from "../components/Loader";
-import useOutputIndex from "../hooks/useOutputIndex";
+import useOutputIndex from "../hooks/useApp";
 
 export default function History() {
   //   const [activeTab, setActiveTab] = useState("today");
@@ -21,16 +21,17 @@ export default function History() {
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
   const entries = indexList.slice(indexOfFirstEntry, indexOfLastEntry);
 
-  console.log("entries", entries);
+  console.log("entries", entries, itemsCache);
   const goToPage = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
-    const ids = entries.map((entry) => entry.id);
-    loadItems(ids);
-  }, [entries, loadItems]);
+    console.log("entries", entries);
+    const ids = entries.map((entry) => entry.json);
+    if (ids) loadItems(ids);
+  }, []);
 
   return (
     <div className="w-[900px] max-w-[70wh] flex flex-col gap-4">
@@ -142,17 +143,25 @@ export default function History() {
         <div className="max-h-[500px] max-w-10xl w-full mx-auto p-6 space-y-6 overflow-auto">
           {loadingIndex && <div>Loading entries...</div>}
           {!loadingIndex &&
+            itemsCache &&
+            itemsCache.length < 11 &&
             entries.map((entry) => {
-              const cached = itemsCache[entry.id];
-              console.log("Cached data:", itemsCache, itemsCache);
-              const english = cached ? cached.transcript ?? "" : "";
-              const french = cached ? cached.translation ?? "" : "";
-              const literal = cached ? cached.pivot ?? "" : "";
+              console.log("entry", entry.id);
+              const cache = itemsCache.find(
+                (item) => item.audio.json === entry.audio.json
+              );
+              console.log("cache", cache);
+              if (!cache) return <Loader />;
+              const { audio } = cache;
+              console.log("Cached data:", audio);
+              const english = audio ? audio.transcript ?? "" : "";
+              const french = audio ? audio.translation ?? "" : "";
+              const literal = audio ? audio.pivot ?? "" : "";
 
-              if (!cached) return <Loader />;
+              if (!audio) return <Loader />;
               return (
                 <div
-                  key={entry.id}
+                  key={entry.audio.json}
                   className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative"
                 >
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600 rounded-l-lg"></div>
@@ -163,13 +172,13 @@ export default function History() {
 
                   {(viewMode === "both" || viewMode === "translation") && (
                     <p className="text-lg text-purple-600 mb-3 leading-relaxed">
-                      {english || (cached ? "—" : "No transcript loaded")}
+                      {english || (audio ? "—" : "No transcript loaded")}
                     </p>
                   )}
 
                   {(viewMode === "both" || viewMode === "transcription") && (
                     <p className="text-base text-gray-400 italic mb-3 leading-relaxed">
-                      {french || (cached ? "—" : "No translation loaded")}
+                      {french || (audio ? "—" : "No translation loaded")}
                     </p>
                   )}
 

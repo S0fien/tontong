@@ -1,4 +1,3 @@
-import { useIsFetching } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -6,45 +5,43 @@ import Phonograph from "../components/Phonograph";
 import { Card } from "../components/ui/Card";
 import { CardBody } from "../components/ui/CardBody";
 import { CardFooter } from "../components/ui/CardFooter";
-import useOutputIndex from "../hooks/useOutputIndex";
+import useOutputIndex from "../hooks/useApp";
 import type { CardType } from "../interfaces";
 
 const MonologueDetail = () => {
   const { id: idParam } = useParams({ strict: false });
 
   console.log("id param", idParam);
-  const id = idParam || "A1-003-001";
   const navigate = useNavigate();
-  const { indexList, itemsCache, loadItem } = useOutputIndex();
+  const { indexList, itemsCache, loadItem, currentEntry, loadingItemId } =
+    useOutputIndex();
+  const id = idParam || indexList[0];
 
-  const isFetching = useIsFetching();
-  console.log("useIfFeting", isFetching);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  console.log("itemscache", itemsCache);
   // Find the entry and its data
-  const currentEntry = indexList.find((e) => e.id === id);
-  const currentCard: CardType | null =
-    currentEntry && itemsCache[currentEntry.id]
-      ? {
-          id: currentEntry.id,
-          transcript: itemsCache[currentEntry.id].transcript ?? "",
-          pivot: itemsCache[currentEntry.id].pivot ?? "",
-          translation: itemsCache[currentEntry.id].translation ?? "",
-          audio: currentEntry.audio
-            ? `/output/${currentEntry.audio}`
-            : `/output/${currentEntry.folder}/${
-                itemsCache[currentEntry.id].audio ?? ""
-              }`,
-        }
-      : null;
+  // const currentEntry = /indexList.find((e) => e.id === id);
+  console.log("useIfFeting", currentEntry, loadingItemId);
+  const currentCard: CardType | undefined = currentEntry
+    ? {
+        audio: {
+          ...currentEntry.audio,
+          path: `https://cjogyxlcgjmhhjzxigma.supabase.co/storage/v1/object/public/assets/${id}-audio.ogg`,
+        },
+        phone: currentEntry.phone,
+        word: currentEntry.word,
+      }
+    : undefined;
 
+  console.log("currentcard", currentCard);
   // Load the item's data on mount
   useEffect(() => {
-    if (!currentEntry) return;
-    if (itemsCache[currentEntry.id]) return;
-    loadItem(currentEntry.id);
-  }, [currentEntry, itemsCache, loadItem]);
+
+    if (loadingItemId === "null" || !loadingItemId) return;
+loadItem(loadingItemId);
+  }, [currentEntry, itemsCache, loadItem, loadingItemId]);
 
   const handlePrevious = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
@@ -92,7 +89,7 @@ const MonologueDetail = () => {
   const currentIdx = indexList.findIndex((e) => e.id === id);
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-purple-700 via-purple-600 to-pink-500 flex flex-col justify-center items-center w-full">
+    <div className="min-h-screen py-8 relative  flex flex-col justify-center items-center w-full">
       {/* Back Button */}
       <div className="absolute top-6 left-6">
         <button
@@ -111,9 +108,9 @@ const MonologueDetail = () => {
         // }
         footer={<CardFooter />}
         body={<CardBody />}
-        isLoading={!currentEntry || !itemsCache[currentEntry.id]}
+        isLoading={!currentEntry}
         loadingItemId={currentEntry.id ?? ""}
-        currentCard={currentCard!}
+        currentCard={currentCard}
       />
 
       {/* Navigation Buttons */}
@@ -154,12 +151,12 @@ const MonologueDetail = () => {
         </p>
       </div>
 
-      <Phonograph phones={itemsCache[currentEntry.id]?.phones || []} />
+      <Phonograph phones={currentCard?.phone || []} />
 
       {/* Hidden Audio Element */}
       <audio
         ref={audioRef}
-        src={currentCard?.audio}
+        src={currentCard?.audio.path}
         onEnded={handleAudioEnded}
       />
     </div>

@@ -5,6 +5,8 @@ export const CardBody = ({
   loadingItemId,
   isFlipped,
 }: CardBodyProps) => {
+  console.log("currentcard", currentCard);
+  const  audio = currentCard && currentCard ? currentCard.audio : undefined;
   return (
     <>
       {/* Front Side */}
@@ -15,24 +17,22 @@ export const CardBody = ({
       >
         <div className="px-8 py-4">
           <h2 className="text-4xl font-bold text-gray-800 mb-6">
-            {currentCard
-              ? currentCard.translation
+            {audio
+              ? audio.translation
               : loadingItemId
               ? "Loading..."
               : "No data"}
           </h2>
-          <p className="text-2xl text-gray-400">
-            {currentCard ? currentCard.pivot : ""}
-          </p>
+          <p className="text-2xl text-gray-400">{audio ? audio.pivot : ""}</p>
         </div>
       </div>
 
       {/* Back Side */}
-      <div className="transform-[rotateY(180deg)] backface-hidden">
+      <div className="transform-[rotateY(180deg)] backface-hidden invisible hidden">
         <div className="px-8 py-4">
           <h2 className="text-4xl font-bold text-gray-800 mb-6">
-            {currentCard
-              ? currentCard.transcript
+            {audio
+              ? audio.transcript
               : loadingItemId
               ? "Loading..."
               : "No data"}

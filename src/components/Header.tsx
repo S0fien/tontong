@@ -2,14 +2,15 @@ import { Link } from "@tanstack/react-router";
 import { House, LogOut } from "lucide-react";
 import { router } from "../routes";
 import { useAppStore } from "../store";
+import { Button } from "./ui/button";
 
 export const Header = () => {
   const user = useAppStore((state) => state.user);
   const setUser = useAppStore((state) => state.setUser);
 
   return (
-    <div className="w-full relative p-3 mb-4 flex justify-between items-center">
-      <Link to="/" className="absolute left-3">
+    <div className="w-full h-[10vh]  p-3 flex justify-between items-center">
+      <Link to="/" className={`pl-3 ${!user && "hidden"}`}>
         <House className="text-white size-7 hover:size-8 transition-all" />
       </Link>
       <div className="w-full flex justify-center">
@@ -18,7 +19,8 @@ export const Header = () => {
         </span>
       </div>
       {user && (
-        <button
+        <Button
+          variant={"brutal"}
           onClick={() => {
             setUser(null);
             router.navigate({ to: "/" });
@@ -27,7 +29,7 @@ export const Header = () => {
         >
           <LogOut />
           <span className="font-thin text-md">Se déconnecter</span>
-        </button>
+        </Button>
       )}
     </div>
   );

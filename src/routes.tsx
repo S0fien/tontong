@@ -15,14 +15,12 @@ export const grammarRoute = new Route({
 // Root layout route
 export const rootRoute = new RootRoute({
   component: App,
-  beforeLoad: async ({ location, matches }) => {
+  beforeLoad: async ({ location }) => {
     const user = useAppStore.getState().user;
-    console.log("Current user in route guard:", location, loginRoote, matches);
     if (location.pathname === "/") {
       return;
     }
     if (!user) {
-      console.log("No user found, redirecting to /login");
       return redirect({ to: "/" });
     }
   },
@@ -34,9 +32,7 @@ export const loginRoote = new Route({
   component: Login,
   beforeLoad: async () => {
     const user = useAppStore.getState().user;
-    console.log("Current user in login route guard:", user);
     if (user) {
-      console.log("User found, redirecting to /dashboard");
       return redirect({ to: "/dashboard" });
     }
   },

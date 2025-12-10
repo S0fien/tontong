@@ -1,5 +1,5 @@
 import React from "react";
-import useOutputIndex from "../hooks/useOutputIndex";
+import useOutputIndex from "../hooks/useApp";
 import MonologueDetail from "./MonologueDetail";
 
 const Monologues: React.FC = () => {

@@ -23,6 +23,7 @@ export const Card = ({
   footer?: React.ReactNode;
 } & Partial<HTMLDivElement>) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  console.log(currentCard);
   const Header = header
     ? React.cloneElement(header as React.ReactElement<CardHeaderProps>, {
         currentCard,
@@ -50,7 +51,7 @@ export const Card = ({
         {Header}
 
         <div
-          className={`min-h-[200px] flex flex-col justify-center transition-transform duration-700 transform-3d ${
+          className={`min-h-[100px] flex flex-col justify-center transition-transform duration-700 transform-3d ${
             isFlipped ? "transform-[rotateY(180deg)]" : ""
           }`}
         >

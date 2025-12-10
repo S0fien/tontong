@@ -1,32 +1,24 @@
 import { Link } from "@tanstack/react-router";
 import { FileText, History, List, MessageSquare, Smile } from "lucide-react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useSupabase } from "../hooks/useSupabase";
-import { supabase } from "../services/supabase";
 
 export default function Menu() {
   const { query } = useSupabase();
 
+  const fetchData = useCallback(async () => {
+    const data = await query("users", { limit: 100 });
+    console.log("data", data);
+  }, [query]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      const dqsqsd = await supabase.from("users").select("*");
-      console.log("dqsqsd", dqsqsd);
-      const lol = await supabase.schema("public");
-      if (lol === null || !lol.fetch) return;
-      const oooo = await lol.fetch("SELECT * FROM users LIMIT 10");
-      const kkkk = await lol.from("users");
-
-      const iii = await oooo.text();
-      // const lll = await oooo.json();
-      console.log("lol", oooo, kkkk, iii);
-
-      const data = await query("users", { limit: 100 });
-      console.log("Fetched data:", data);
-    };
     fetchData();
-  }, []);
+  }, [fetchData]);
   return (
-    <div className="bg-gray-200 rounded-3xl p-4 w-full max-w-2xl shadow-2xl">
+    <div
+      className="bg-gray-200 rounded-3xl p-4 w-full max-w-2xl shadow-2xl
+"
+    >
       <div className="grid grid-cols-2 gap-6">
         {/* Monologues - Large Card */}
         <Link
