@@ -1,6 +1,7 @@
 import type { AuthResponsePassword } from "@supabase/supabase-js";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { CardType } from "./interfaces";
 
 interface User {
   id?: string;
@@ -20,6 +21,8 @@ interface AppState {
   addToHistory: (id: string) => void;
   clearHistory: () => void;
 
+  index: CardType[];
+  setIndex: (index: CardType[]) => unknown;
   // UI state
   sidebarOpen: boolean;
   toggleSidebar: () => void;
@@ -39,7 +42,11 @@ export const useAppStore = create<AppState>()(
       setTheme: (theme) => set({ theme }),
       setVolume: (vol) => set({ volume: vol }),
 
-      // History
+      index: [],
+      setIndex: (index: CardType[]) =>
+        set(() => {
+          return { index }; // Keep last 50
+        }), // History
       history: [],
       addToHistory: (id) =>
         set((state) => {

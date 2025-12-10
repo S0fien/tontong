@@ -5,6 +5,7 @@ import { ASSETS_BUCKETS } from "../constants";
 import type { CardType } from "../interfaces";
 import { indexRoute, rootRoute } from "../routes";
 import { supabase } from "../services/supabase";
+import { useAppStore } from "../store";
 
 // ---------------------- Auth hooks (same API as previous useAuth) ----------------------
 export interface LoginProps {
@@ -76,17 +77,22 @@ export const useAuth = () => {
 // ---------------------- Output index hook (same API as previous useOutputIndex) ----------------------
 
 export function useOutputIndex() {
-  const [indexList, setIndexList] = useState<CardType[]>([]);
+  const { index } = useAppStore();
+
+  const [indexList, setIndexList] = useState<CardType[]>(index);
   const [itemsCache, setItemsCache] = useState<CardType[]>([]);
   const [loadingIndex, setLoadingIndex] = useState<boolean>(true);
   const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentEntry, setCurrentEntry] = useState<CardType>();
 
+  console.log("index", index);
   useEffect(() => {
     let mounted = true;
     async function loadIndex() {
       try {
+        console.log("loli", indexList.length);
+
         const jo = await supabase.storage.from(ASSETS_BUCKETS);
         const { data } = await jo.getPublicUrl("index.json");
         const truc = await fetch(data.publicUrl!, { method: "GET" });

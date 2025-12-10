@@ -1,11 +1,19 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Header } from "./components/Header";
 import { BackgroundGradientAnimation } from "./components/ui/Background";
+import useOutputIndex from "./hooks/useApp";
 import "./index.css";
+import { useAppStore } from "./store";
 
 function App() {
   const queryClient = new QueryClient();
+  const { indexList, loadingIndex } = useOutputIndex();
+  const { setIndex } = useAppStore();
+  useEffect(() => {
+    if (!loadingIndex && indexList.length > 0) setIndex(indexList);
+  }, [indexList, loadingIndex, setIndex]);
   return (
     <QueryClientProvider client={queryClient}>
       <BackgroundGradientAnimation>
