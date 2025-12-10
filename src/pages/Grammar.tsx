@@ -1,4 +1,5 @@
 import { AccordionContent } from "@radix-ui/react-accordion";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import {
   BookOpen,
   CheckCircle,
@@ -13,6 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../components/ui/Accordeon";
+import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/Card";
 import { CardBody } from "../components/ui/CardBody";
 import { CardFooter } from "../components/ui/CardFooter";
@@ -39,14 +41,13 @@ const ddsq = Array.from(
 
 const Grammar = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-
-  const [selectedLevel, setSelectedLevel] = useState("A1");
+  const navigate = useNavigate();
+  const params = useParams({ strict: false });
+  console.log("params", params);
   const [completedTopics, setCompletedTopics] = useState(new Set());
-  const [viewMode, setViewMode] = useState("examples"); // 'examples' or 'practice'
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { indexList } = useOutputIndex();
-
   const handlePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -97,123 +98,109 @@ const Grammar = () => {
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-white">CEFR Level</h2>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setViewMode("examples")}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                  viewMode === "examples"
-                    ? "bg-white text-purple-900"
-                    : "bg-purple-600/50 text-white hover:bg-purple-600"
-                }`}
-              >
-                Examples
-              </button>
-              <button
-                onClick={() => setViewMode("practice")}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                  viewMode === "practice"
-                    ? "bg-white text-purple-900"
-                    : "bg-purple-600/50 text-white hover:bg-purple-600"
-                }`}
-              >
-                Practice
-              </button>
-            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            {ddsq.map((level) => (
-              <button
-                key={level}
-                onClick={() => setSelectedLevel(level)}
-                className={`relative overflow-hidden rounded-xl p-6 transition-all ${
-                  selectedLevel === level
-                    ? "ring-4 ring-white shadow-2xl scale-105"
-                    : "hover:scale-102 opacity-80 hover:opacity-100"
-                }`}
-              >
-                <div
-                  className={`absolute inset-0 bg-linear-to-br opacity-90`}
-                />
-                <div className="relative z-10">
-                  <div className="text-3xl font-bold text-white mb-1">
-                    {level}
+          <div className="flex flex-wrap justify-center gap-2">
+            {ddsq.map((level, indox) => {
+              const lul = indexList[indox];
+              if (!lul) return;
+              const lil = lul.id.slice(0, 6);
+              return (
+                <Button
+                  onClick={() => {
+                    navigate({
+                      to: "/grammar",
+                      hash: "grammar" + indox,
+                      resetScroll: false,
+                      viewTransition: true,
+                      hashScrollIntoView: { behavior: "smooth" },
+                    });
+                  }}
+                >
+                  <div
+                    className={`absolute inset-0 bg-linear-to-br opacity-90`}
+                  />
+                  <div className="relative z-10">
+                    <div className="text-xl font-bold text-white mb-1">
+                      {level} {lil}
+                    </div>
                   </div>
-                  <div className="text-sm text-white/90">
-                    ${level.toString()}
-                  </div>
-                </div>
-              </button>
-            ))}
+                </Button>
+              );
+            })}
           </div>
         </div>
 
         {/* Categories and Topics */}
         <div className="space-y-6">
-          {ddsq.map((data, index) => (
-            <div
-              key={index}
-              className="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden"
-            >
-              <div className="bg-linear-to-r from-purple-600/50 to-pink-600/50 px-6 py-4 border-b border-white/20">
-                <h3 className="text-xl font-bold text-white">
-                  {index + 1}. {data}
-                </h3>
-              </div>
-              <div className="divide-y divide-white/10">
-                {soso
-                  .filter(
-                    (item) =>
-                      (item as { metacategory: string }).metacategory === data,
-                  )
-                  .map((item, ix) => {
-                    const { cefr, category } = item;
-                    const isCompleted = completedTopics.has(cefr);
+          {ddsq.map((data, index) => {
+            return (
+              <div
+                key={index}
+                id={`grammar${index}`}
+                className="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden"
+              >
+                <div className="bg-linear-to-r from-purple-600/50 to-pink-600/50 px-6 py-4 border-b border-white/20">
+                  <h3 className="text-xl font-bold text-black">
+                    {index + 1}. {data}
+                  </h3>
+                </div>
+                <div className="divide-y divide-white/10">
+                  {soso
+                    .filter(
+                      (item) =>
+                        (item as { metacategory: string }).metacategory ===
+                        data,
+                    )
+                    .map((item, ix) => {
+                      const { cefr, category } = item;
+                      const isCompleted = completedTopics.has(cefr);
 
-                    const dqsdsd = indexList[ix];
-                    console.log("lll", dqsdsd);
-                    if (!dqsdsd) return <Loader />;
-                    return (
-                      <Accordion collapsible type="single" key={ix}>
-                        <AccordionItem value={`${ix}`}>
-                          <AccordionTrigger>
-                            <div className="flex items-center gap-4">
-                              <ChevronRight
-                                className={`w-5 h-5 transition-transform`}
-                              />
-                              <span className=" font-mono text-sm">{cefr}</span>
-                              <span className="text-gray-900 font-medium group-hover:text-gray-700 transition-colors">
-                                {category}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  markComplete(category);
-                                }}
-                                className={`p-1 rounded transition-colors ${
-                                  isCompleted
-                                    ? "text-green-400"
-                                    : "text-white/30 hover:text-white/60"
-                                }`}
-                              >
-                                <CheckCircle className="w-5 h-5" />
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  alert("Audio playback would start here");
-                                }}
-                                className="p-1 text-white/50 hover:text-white transition-colors"
-                              >
-                                <Volume2 className="w-5 h-5" />
-                              </button>
-                            </div>
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            <div className="px-6">
-                              {viewMode === "examples" ? (
+                      const dqsdsd = indexList[ix];
+                      if (!dqsdsd) return <Loader />;
+
+                      return (
+                        <Accordion collapsible type="single" key={ix}>
+                          <AccordionItem value={`${ix}`}>
+                            <AccordionTrigger>
+                              <div className="flex items-center gap-4">
+                                <ChevronRight
+                                  className={`w-5 h-5 transition-transform`}
+                                />
+                                <span className=" font-mono text-sm">
+                                  {cefr}
+                                </span>
+                                <span className="text-gray-900 font-medium group-hover:text-gray-700 transition-colors">
+                                  {category}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    markComplete(category);
+                                  }}
+                                  className={`p-1 rounded transition-colors ${
+                                    isCompleted
+                                      ? "text-green-400"
+                                      : "text-white/30 hover:text-white/60"
+                                  }`}
+                                >
+                                  <CheckCircle className="w-5 h-5" />
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    alert("Audio playback would start here");
+                                  }}
+                                  className="p-1 text-white/50 hover:text-white transition-colors"
+                                >
+                                  <Volume2 className="w-5 h-5" />
+                                </button>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              <div className="px-6">
                                 <div className="space-y-3">
                                   {category && (
                                     <div className="flex justify-between py-3 ">
@@ -257,17 +244,16 @@ const Grammar = () => {
                                     </div>
                                   )}
                                 </div>
-                              ) : null}
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
-                    );
-                  })}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      );
+                    })}
+                </div>
               </div>
-              ); )
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Progress Summary */}

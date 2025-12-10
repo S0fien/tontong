@@ -22,50 +22,48 @@ export default function Menu() {
     >
       <div className="grid grid-cols-2 gap-6">
         {/* Monologues - Large Card */}
-        <Button
-          variant={"brutal"}
-          className="rounded-2xl p-3 flex flex-col size-auto items-center justify-center  cursor-pointer"
-        >
-          <Link
-            to="/monologues"
-            className="flex flex-col justify-center items-center"
+        <Link to="/monologues" className="size-full">
+          <Button
+            variant={"brutal"}
+            className="rounded-2xl p-3 flex flex-col size-full items-center justify-center  cursor-pointer"
           >
             <MessageSquare
               className="w-10 h-10 text-white mb-4"
               strokeWidth={2}
             />
             <h2 className="text-xl font-semibold text-white">Monologues</h2>
-          </Link>
-        </Button>
+          </Button>
+        </Link>
 
         {/* Right Column - Small Cards */}
         <div className="flex flex-col gap-6">
           {/* History Card */}
+             <Link       to="/history"
+ className="size-full">
           <Button
             variant={"brutal"}
-            className="rounded-2xl p-3 flex flex-col size-auto items-center justify-center  cursor-pointer"
+            className="rounded-2xl p-3 flex flex-col size-full items-center justify-center  cursor-pointer"
           >
-            <Link
-              to="/history"
-              className="flex flex-col justify-center items-center"
-            >
+      
               <History className="w-10 h-10 text-white mb-2" strokeWidth={2} />
               <h3 className="text-base font-medium text-white">History</h3>
-            </Link>
           </Button>
+                      </Link>
+
           {/* Grammar Card */}
+          <Link       to="/grammar"
+ className="size-full">
           <Button
             variant={"brutal"}
-            className="rounded-2xl p-3 flex flex-col size-auto items-center justify-center cursor-pointer"
+            className="rounded-2xl p-3 flex flex-col size-full items-center justify-center  cursor-pointer"
           >
-            <Link
-              to="/grammar"
-              className="flex flex-col justify-center items-center"
-            >
+    
+           
               <List className="w-10 h-10 text-white mb-2" strokeWidth={2} />
               <h3 className="text-base font-medium text-white">Grammar</h3>
-            </Link>
           </Button>
+                      </Link>
+
         </div>
 
         {/* Dialogues - Large Card */}
