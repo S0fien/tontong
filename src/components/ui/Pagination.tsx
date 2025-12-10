@@ -40,7 +40,7 @@ const PaginationLink = React.forwardRef<
   }
 >(({ className, isActive, ...props }, ref) => (
   <a
-  ref={ref}
+    ref={ref}
     aria-current={isActive ? "page" : undefined}
     className={cn(
       "inline-flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-sm font-bold transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none dark:hover:shadow-none",
@@ -63,7 +63,7 @@ const PaginationPrevious = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof PaginationLink>
 >(({ className, ...props }, ref) => (
   <PaginationLink
-  ref={ref}
+    ref={ref}
     aria-label="Go to previous page"
     className={cn(
       "mr-2 flex h-10 w-auto px-4 py-2",
@@ -84,7 +84,7 @@ const PaginationNext = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof PaginationLink>
 >(({ className, ...props }, ref) => (
   <PaginationLink
-  ref={ref}
+    ref={ref}
     aria-label="Go to next page"
     className={cn(
       "ml-2 flex h-10 w-auto px-4 py-2",

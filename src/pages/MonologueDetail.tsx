@@ -77,6 +77,7 @@ const MonologueDetail = () => {
   };
 
   const handlePlay = () => {
+    console.log("handle play");
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
@@ -92,7 +93,7 @@ const MonologueDetail = () => {
     setIsPlaying(false);
   };
 
-  console.log(currentCard);
+  console.log("meee", isPlaying);
   if (!id) {
     return (
       <div className="size-full flex items-center justify-center ">
@@ -166,7 +167,7 @@ const MonologueDetail = () => {
         </button>
       </div>
 
-      <Phonograph phones={currentCard?.phone || []} />
+      <Phonograph playing={isPlaying} phones={currentCard?.phone || []} />
       {/* Progress Indicator */}
       <div className="flex flex-col pb-3 justify-center items-center gap-2">
         <p className="text-white text-sm">

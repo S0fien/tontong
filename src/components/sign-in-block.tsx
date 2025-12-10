@@ -150,7 +150,12 @@ const SignInBlock = () => {
           <p className="text-sm text-red-600">{errors.password}</p>
         )}
       </div>
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="w-full"
+        variant="brutal"
+        disabled={isLoading}
+      >
         {isLoading ? "Signing In..." : "Sign In"}
       </Button>
     </form>

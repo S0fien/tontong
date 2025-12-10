@@ -8,7 +8,7 @@ export const Loader = ({
 }: LucideProps) => {
   return (
     <div className={`text-${color} size-${size} ${className}`}>
-      <Dots variant="v3"/>
+      <Dots variant="v3" />
     </div>
   );
 };

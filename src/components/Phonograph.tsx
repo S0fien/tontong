@@ -412,13 +412,17 @@ const arpabetData = [
   },
 ];
 
-const Phonograph = ({ phones }: { phones: PhoneType[] }) => {
+const Phonograph = ({
+  phones,
+  playing,
+}: {
+  phones: PhoneType[];
+  playing: boolean;
+}) => {
   const [currentTime, setCurrentTime] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const animationRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
 
-  console.log("phone", phones);
   const maxTime = Math.max(...phones.map((p) => p.end));
 
   const getColor = (phone: string) => {
@@ -433,7 +437,7 @@ const Phonograph = ({ phones }: { phones: PhoneType[] }) => {
   };
 
   useEffect(() => {
-    if (isPlaying) {
+    if (playing) {
       startTimeRef.current = performance.now() - currentTime * 1000;
 
       const animate = (timestamp: number) => {
@@ -443,7 +447,6 @@ const Phonograph = ({ phones }: { phones: PhoneType[] }) => {
 
         if (elapsed >= maxTime) {
           setCurrentTime(0);
-          setIsPlaying(false);
           startTimeRef.current = null;
         } else {
           setCurrentTime(elapsed);
@@ -463,16 +466,7 @@ const Phonograph = ({ phones }: { phones: PhoneType[] }) => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [currentTime, isPlaying, maxTime]);
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const reset = () => {
-    setIsPlaying(false);
-    setCurrentTime(0);
-  };
+  }, [currentTime, playing, maxTime]);
 
   return (
     <div className="p-8">
@@ -535,25 +529,9 @@ const Phonograph = ({ phones }: { phones: PhoneType[] }) => {
           </div>
 
           {/* Time display */}
-          <div className="flex justify-between items-center text-white/70 text-sm mb-4">
+          <div className="flex justify-between items-center text-white/70 text-sm mb-1">
             <span>{currentTime.toFixed(2)}s</span>
             <span>{maxTime.toFixed(2)}s</span>
-          </div>
-
-          {/* Controls */}
-          <div className="flex gap-4 justify-center">
-            <button
-              onClick={togglePlay}
-              className="px-6 py-2 bg-white text-purple-900 rounded-lg font-semibold hover:bg-purple-100 transition-colors"
-            >
-              {isPlaying ? "Pause" : "Play"}
-            </button>
-            <button
-              onClick={reset}
-              className="px-6 py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors"
-            >
-              Reset
-            </button>
           </div>
         </div>
 
@@ -566,7 +544,6 @@ const Phonograph = ({ phones }: { phones: PhoneType[] }) => {
             {phones
               .filter((p) => p.phone !== "sp")
               .map((phone, idx) => {
-                console.log("phone", phone);
                 const color = getColor(phone.phone);
                 const active =
                   currentTime >= phone.start && currentTime <= phone.end;
