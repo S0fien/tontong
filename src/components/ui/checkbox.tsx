@@ -17,11 +17,12 @@ const checkboxVariants = cva(
     defaultVariants: {
       size: "default",
     },
-  }
+  },
 );
 
 interface CheckboxProps
-  extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
+  extends
+    React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
     VariantProps<typeof checkboxVariants> {
   label?: string;
   description?: string;
@@ -33,7 +34,7 @@ const CheckboxRoot = React.forwardRef<
   CheckboxProps
 >(({ className, size, label, description, error, id, ...props }, ref) => {
   const idGeneraterated = React.useId();
-  const checkboxId = id || idGeneraterated
+  const checkboxId = id || idGeneraterated;
   const iconSize = size === "sm" ? 10 : size === "lg" ? 14 : 12;
 
   // Custom SVG check path for drawing animation
@@ -113,7 +114,7 @@ const CheckboxRoot = React.forwardRef<
               <label
                 htmlFor={checkboxId}
                 className={cn(
-                  "text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                  "text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer",
                 )}
               >
                 {label}

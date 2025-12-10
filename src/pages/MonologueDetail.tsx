@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Loader } from "../components/Loader";
 import Phonograph from "../components/Phonograph";
 import { Card } from "../components/ui/Card";
 import { CardBody } from "../components/ui/CardBody";
@@ -13,9 +14,15 @@ const MonologueDetail = () => {
 
   console.log("id param", idParam);
   const navigate = useNavigate();
-  const { indexList, itemsCache, loadItem, currentEntry, loadingItemId } =
-    useOutputIndex();
-  const id = idParam || indexList[0];
+  const {
+    indexList,
+    itemsCache,
+    loadItem,
+    setCurrentEntry,
+    currentEntry,
+    loadingItemId,
+  } = useOutputIndex();
+  const id = idParam;
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -26,6 +33,7 @@ const MonologueDetail = () => {
   console.log("useIfFeting", currentEntry, loadingItemId);
   const currentCard: CardType | undefined = currentEntry
     ? {
+        id: currentEntry.id,
         audio: {
           ...currentEntry.audio,
           path: `https://cjogyxlcgjmhhjzxigma.supabase.co/storage/v1/object/public/assets/${id}-audio.ogg`,
@@ -35,13 +43,20 @@ const MonologueDetail = () => {
       }
     : undefined;
 
-  console.log("currentcard", currentCard);
+  console.log(
+    "currentcard",
+    id,
+    itemsCache.find((item) => item.id === id),
+  );
   // Load the item's data on mount
   useEffect(() => {
-
     if (loadingItemId === "null" || !loadingItemId) return;
-loadItem(loadingItemId);
+    loadItem(loadingItemId);
   }, [currentEntry, itemsCache, loadItem, loadingItemId]);
+
+  useEffect(() =>
+    setCurrentEntry(indexList.find((item) => item.id === id) || indexList[0]),
+  );
 
   const handlePrevious = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
@@ -54,10 +69,10 @@ loadItem(loadingItemId);
 
   const handleNext = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
-    if (currentIdx < indexList.length - 1) {
+    if (currentIdx !== -1) {
+      console.log("arf", currentIdx, indexList[currentIdx + 1].id);
+
       navigate({ to: `/monologues/${indexList[currentIdx + 1].id}` });
-    } else if (indexList.length > 0) {
-      navigate({ to: `/monologues/${indexList[0].id}` });
     }
   };
 
@@ -78,13 +93,20 @@ loadItem(loadingItemId);
   };
 
   console.log(currentCard);
-  if (!currentEntry || !id) {
+  if (!id) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-purple-700 via-purple-600 to-pink-500">
+      <div className="size-full flex items-center justify-center ">
         <div className="text-white text-2xl">Monologue not found</div>
       </div>
     );
-  }
+  } else if (!currentEntry)
+    return (
+      <div className="size-full flex items-center justify-center ">
+        <div className="text-white text-2xl">
+          <Loader />
+        </div>
+      </div>
+    );
 
   const currentIdx = indexList.findIndex((e) => e.id === id);
 
@@ -144,15 +166,13 @@ loadItem(loadingItemId);
         </button>
       </div>
 
+      <Phonograph phones={currentCard?.phone || []} />
       {/* Progress Indicator */}
-      <div className="flex flex-col fixed bottom-3 justify-center items-center gap-2">
+      <div className="flex flex-col pb-3 justify-center items-center gap-2">
         <p className="text-white text-sm">
           Monologue {currentIdx + 1} of {indexList.length}
         </p>
       </div>
-
-      <Phonograph phones={currentCard?.phone || []} />
-
       {/* Hidden Audio Element */}
       <audio
         ref={audioRef}

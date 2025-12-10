@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ASSETS_BUCKETS } from "../constants";
-import type { CacheEntry, IndexEntry } from "../interfaces";
+import type { CardType } from "../interfaces";
 import { indexRoute, rootRoute } from "../routes";
 import { supabase } from "../services/supabase";
 
@@ -74,15 +74,14 @@ export const useAuth = () => {
 };
 
 // ---------------------- Output index hook (same API as previous useOutputIndex) ----------------------
-export type CacheMap = CacheEntry;
 
 export function useOutputIndex() {
-  const [indexList, setIndexList] = useState<IndexEntry[]>([]);
-  const [itemsCache, setItemsCache] = useState<CacheMap[]>([]);
+  const [indexList, setIndexList] = useState<CardType[]>([]);
+  const [itemsCache, setItemsCache] = useState<CardType[]>([]);
   const [loadingIndex, setLoadingIndex] = useState<boolean>(true);
   const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [currentEntry, setCurrentEntry] = useState<IndexEntry | null>(null);
+  const [currentEntry, setCurrentEntry] = useState<CardType>();
 
   useEffect(() => {
     let mounted = true;
@@ -102,7 +101,7 @@ export function useOutputIndex() {
           setLoadingItemId(index[0].id);
           try {
             const { data } = await jo.getPublicUrl(
-              index[0].json!.replace("-data.json", "")
+              index[0].json!.replace("-data.json", ""),
             );
             console.log("data", data);
             if (data.publicUrl) {
@@ -154,13 +153,13 @@ export function useOutputIndex() {
     if (!indexList || !indexList.length) return;
     if (itemsCache.find((item) => item.audio.json === id)) return; // already loaded
     const entry = indexList.find((e) => e.id === id);
-    if (!entry || !entry.json) return;
+    if (!entry || !entry.audio.json) return;
     try {
       setLoadingItemId(id);
       const jo = await supabase.storage.from(ASSETS_BUCKETS);
 
       const { data } = await jo.getPublicUrl(
-        indexList.find((e) => e.id === id)!.json
+        indexList.find((e) => e.id === id)!.audio.json,
       );
       const formattedUrl = data.publicUrl!.replace("-data.json", "");
       console.log("formated", formattedUrl);
@@ -191,6 +190,7 @@ export function useOutputIndex() {
     loadingItemId,
     currentEntry,
     loadItem,
+    setCurrentEntry,
     loadItems,
   } as const;
 }

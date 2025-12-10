@@ -9,17 +9,13 @@ export const CardHeader = ({
     return null; // Loader is handled at the Card level
   }
 
-  const  audio = currentCard && currentCard ? currentCard.audio : undefined;
+  const audio = currentCard && currentCard ? currentCard.audio : undefined;
   return (
     <div className="px-8 pt-8">
-      <h2 className="text-4xl font-bold text-gray-800 mb-6">
-        {audio
-          ? audio.translation
-          : loadingItemId
-          ? "Loading..."
-          : "No data"}
+      <h2 className="text-lg text-purple-600 mb-3 leading-relaxed">
+        {audio ? audio.translation : loadingItemId ? "Loading..." : "No data"}
       </h2>
-      <p className="text-2xl text-gray-400">
+      <p className="text-lg text-purple-600 mb-3 leading-relaxed">
         {audio ? audio.pivot : ""}
       </p>
     </div>

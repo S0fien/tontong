@@ -30,27 +30,27 @@ interface UseSupabaseReturn {
   // Database operations
   query: (
     table: string,
-    options?: SupabaseQueryOptions
+    options?: SupabaseQueryOptions,
   ) => Promise<DatabaseRecord[]>;
   insert: (
     table: string,
-    data: DatabaseRecord | DatabaseRecord[]
+    data: DatabaseRecord | DatabaseRecord[],
   ) => Promise<DatabaseRecord | DatabaseRecord[] | null>;
   update: (
     table: string,
     data: DatabaseRecord,
-    filter: { column: string; value: FilterValue }
+    filter: { column: string; value: FilterValue },
   ) => Promise<DatabaseRecord[] | null>;
   delete: (
     table: string,
-    filter: { column: string; value: FilterValue }
+    filter: { column: string; value: FilterValue },
   ) => Promise<void>;
 
   // Storage operations
   uploadFile: (
     bucket: string,
     path: string,
-    file: File
+    file: File,
   ) => Promise<SupabaseFile>;
   downloadFile: (bucket: string, path: string) => Promise<Blob>;
   deleteFile: (bucket: string, path: string) => Promise<void>;
@@ -74,7 +74,7 @@ export function useSupabase(): UseSupabaseReturn {
   const query = useCallback(
     async (
       table: string,
-      options?: SupabaseQueryOptions
+      options?: SupabaseQueryOptions,
     ): Promise<DatabaseRecord[]> => {
       setIsLoading(true);
       setError(null);
@@ -133,7 +133,7 @@ export function useSupabase(): UseSupabaseReturn {
         if (options?.offset) {
           q = q.range(
             options.offset,
-            options.offset + (options.limit || 10) - 1
+            options.offset + (options.limit || 10) - 1,
           );
         }
 
@@ -149,13 +149,13 @@ export function useSupabase(): UseSupabaseReturn {
         setIsLoading(false);
       }
     },
-    []
+    [],
   );
 
   const insert = useCallback(
     async (
       table: string,
-      data: DatabaseRecord | DatabaseRecord[]
+      data: DatabaseRecord | DatabaseRecord[],
     ): Promise<DatabaseRecord | DatabaseRecord[] | null> => {
       setIsLoading(true);
       setError(null);
@@ -169,7 +169,7 @@ export function useSupabase(): UseSupabaseReturn {
         return result;
       } catch (err: unknown) {
         const error = new Error(
-          typeof err === "string" ? err : "Insert failed"
+          typeof err === "string" ? err : "Insert failed",
         );
         setError(error);
         throw error;
@@ -177,14 +177,14 @@ export function useSupabase(): UseSupabaseReturn {
         setIsLoading(false);
       }
     },
-    []
+    [],
   );
 
   const update = useCallback(
     async (
       table: string,
       data: DatabaseRecord,
-      filter: { column: string; value: FilterValue }
+      filter: { column: string; value: FilterValue },
     ): Promise<DatabaseRecord[] | null> => {
       setIsLoading(true);
       setError(null);
@@ -199,7 +199,7 @@ export function useSupabase(): UseSupabaseReturn {
         return result;
       } catch (err: unknown) {
         const error = new Error(
-          typeof err === "string" ? err : "Update failed"
+          typeof err === "string" ? err : "Update failed",
         );
         setError(error);
         throw error;
@@ -207,13 +207,13 @@ export function useSupabase(): UseSupabaseReturn {
         setIsLoading(false);
       }
     },
-    []
+    [],
   );
 
   const deleteRecord = useCallback(
     async (
       table: string,
-      filter: { column: string; value: FilterValue }
+      filter: { column: string; value: FilterValue },
     ): Promise<void> => {
       setIsLoading(true);
       setError(null);
@@ -226,7 +226,7 @@ export function useSupabase(): UseSupabaseReturn {
         if (err) throw err;
       } catch (err: unknown) {
         const error = new Error(
-          typeof err === "string" ? err : "Delete failed"
+          typeof err === "string" ? err : "Delete failed",
         );
         setError(error);
         throw error;
@@ -234,7 +234,7 @@ export function useSupabase(): UseSupabaseReturn {
         setIsLoading(false);
       }
     },
-    []
+    [],
   );
 
   // ============ Storage Operations ============
@@ -261,7 +261,7 @@ export function useSupabase(): UseSupabaseReturn {
         };
       } catch (err: unknown) {
         const error = new Error(
-          typeof err === "string" ? err : "Upload failed"
+          typeof err === "string" ? err : "Upload failed",
         );
         setError(error);
         throw error;
@@ -269,7 +269,7 @@ export function useSupabase(): UseSupabaseReturn {
         setIsLoading(false);
       }
     },
-    []
+    [],
   );
 
   const downloadFile = useCallback(
@@ -285,7 +285,7 @@ export function useSupabase(): UseSupabaseReturn {
         return data;
       } catch (err: unknown) {
         const error = new Error(
-          typeof err === "string" ? err : "Download failed"
+          typeof err === "string" ? err : "Download failed",
         );
         setError(error);
         throw error;
@@ -293,7 +293,7 @@ export function useSupabase(): UseSupabaseReturn {
         setIsLoading(false);
       }
     },
-    []
+    [],
   );
 
   const deleteFile = useCallback(
@@ -308,7 +308,7 @@ export function useSupabase(): UseSupabaseReturn {
         if (err) throw err;
       } catch (err: unknown) {
         const error = new Error(
-          typeof err === "string" ? err : "Delete failed"
+          typeof err === "string" ? err : "Delete failed",
         );
         setError(error);
         throw error;
@@ -316,7 +316,7 @@ export function useSupabase(): UseSupabaseReturn {
         setIsLoading(false);
       }
     },
-    []
+    [],
   );
 
   const listFiles = useCallback(
@@ -347,7 +347,7 @@ export function useSupabase(): UseSupabaseReturn {
         setIsLoading(false);
       }
     },
-    []
+    [],
   );
 
   const getFileUrl = useCallback((bucket: string, path: string): string => {

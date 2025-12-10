@@ -1,17 +1,28 @@
-import { useNavigate } from "@tanstack/react-router";
-import { Menu, MessageCircle, Play } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Menu, Play } from "lucide-react";
+import { useRef, useState } from "react";
 import { Loader } from "../components/Loader";
+import { Card } from "../components/ui/Card";
+import { CardBody } from "../components/ui/CardBody";
+import { CardFooter } from "../components/ui/CardFooter";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../components/ui/Pagination";
 import useOutputIndex from "../hooks/useApp";
 
 export default function History() {
   //   const [activeTab, setActiveTab] = useState("today");
   const [viewMode, setViewMode] = useState("both");
-  const navigate = useNavigate();
   // const [currentEntries, setCurrentEntries] = useState([]);
 
-  const { indexList, itemsCache, loadingIndex, loadItem, loadItems } =
-    useOutputIndex();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const { indexList, itemsCache, loadingIndex } = useOutputIndex();
 
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 10;
@@ -19,7 +30,9 @@ export default function History() {
   const totalPages = Math.ceil(indexList.length / entriesPerPage);
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+  console.log("indexlist", indexList);
   const entries = indexList.slice(indexOfFirstEntry, indexOfLastEntry);
+  // const ids = entries.map((entry) => entry.audio.json);
 
   console.log("entries", entries, itemsCache);
   const goToPage = (page: number) => {
@@ -27,11 +40,23 @@ export default function History() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  useEffect(() => {
-    console.log("entries", entries);
-    const ids = entries.map((entry) => entry.json);
-    if (ids) loadItems(ids);
-  }, []);
+  const handlePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleAudioEnded = () => {
+    setIsPlaying(false);
+  };
+
+  if (loadingIndex) return <Loader />;
 
   return (
     <div className="w-[900px] max-w-[70wh] flex flex-col gap-4">
@@ -141,24 +166,16 @@ export default function History() {
 
         {/* Entries */}
         <div className="max-h-[500px] max-w-10xl w-full mx-auto p-6 space-y-6 overflow-auto">
-          {loadingIndex && <div>Loading entries...</div>}
+          {loadingIndex && (
+            <div>
+              <Loader />
+              <span>Loading entries...</span>
+            </div>
+          )}
           {!loadingIndex &&
             itemsCache &&
             itemsCache.length < 11 &&
             entries.map((entry) => {
-              console.log("entry", entry.id);
-              const cache = itemsCache.find(
-                (item) => item.audio.json === entry.audio.json
-              );
-              console.log("cache", cache);
-              if (!cache) return <Loader />;
-              const { audio } = cache;
-              console.log("Cached data:", audio);
-              const english = audio ? audio.transcript ?? "" : "";
-              const french = audio ? audio.translation ?? "" : "";
-              const literal = audio ? audio.pivot ?? "" : "";
-
-              if (!audio) return <Loader />;
               return (
                 <div
                   key={entry.audio.json}
@@ -170,43 +187,33 @@ export default function History() {
                     <span className="text-xs text-gray-400">{entry.id}</span>
                   </div>
 
-                  {(viewMode === "both" || viewMode === "translation") && (
-                    <p className="text-lg text-purple-600 mb-3 leading-relaxed">
-                      {english || (audio ? "—" : "No transcript loaded")}
-                    </p>
-                  )}
-
-                  {(viewMode === "both" || viewMode === "transcription") && (
-                    <p className="text-base text-gray-400 italic mb-3 leading-relaxed">
-                      {french || (audio ? "—" : "No translation loaded")}
-                    </p>
-                  )}
-
-                  {literal && (
-                    <p className="text-base text-gray-700 leading-relaxed">
-                      {literal}
-                    </p>
-                  )}
-
-                  <div className="absolute bottom-4 right-4 flex gap-3">
+                  <div className="flex justify-between py-3 ">
+                    <Card
+                      // header={
+                      //   <CardHeader />
+                      // }
+                      footer={<CardFooter />}
+                      body={<CardBody />}
+                      isLoading={!entry}
+                      loadingItemId={entry.id ?? ""}
+                      currentCard={entry}
+                    />
                     <button
-                      onClick={() => {
-                        loadItem(entry.id);
-                        navigate({
-                          to: "/monologues/$id",
-                          params: { id: entry.id },
-                        });
-                      }}
-                      className="px-3 py-2 bg-gray-100 rounded-md text-sm hover:bg-gray-200 transition"
+                      onClick={handlePlay}
+                      className={`${
+                        isPlaying ? "bg-purple-600" : "bg-white"
+                      } hover:bg-purple-100 ${
+                        isPlaying ? "text-white" : "text-purple-700"
+                      } rounded-full p-4 h-min m-auto shadow-xl transition transform hover:scale-110`}
+                      aria-label={isPlaying ? "Pause audio" : "Play audio"}
                     >
-                      Load
+                      <Play className="w-8 h-8" fill="currentColor" />
                     </button>
-                    <button className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center shadow-lg hover:bg-purple-700 transition-colors">
-                      <MessageCircle
-                        className="w-6 h-6 text-white"
-                        fill="white"
-                      />
-                    </button>
+                    <audio
+                      ref={audioRef}
+                      src={`https://cjogyxlcgjmhhjzxigma.supabase.co/storage/v1/object/public/assets/${entry.id}-audio.ogg`}
+                      onEnded={handleAudioEnded}
+                    />
                   </div>
                 </div>
               );
@@ -216,43 +223,54 @@ export default function History() {
       {/* Pagination */}
       <div className="max-w-6xl mx-auto px-6 pb-8">
         <div className="flex items-center justify-center gap-2">
-          <button
+          {/* <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
             className="px-3 py-2 rounded-md border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Previous
-          </button>
+          </button> */}
 
-          {[...Array(totalPages)]
-            .slice(
-              currentPage === 1 ? currentPage : currentPage - 2,
-              currentPage + 2
-            )
-            .map((_, index) => {
-              const page = index + 1;
-              return (
-                <button
-                  key={page}
-                  onClick={() => goToPage(page)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    currentPage === page
-                      ? "bg-purple-600 text-white"
-                      : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  {page}
-                </button>
-              );
-            })}
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious onClick={() => goToPage(currentPage - 1)} />
+              </PaginationItem>
 
-          <button
+              {[...Array(totalPages)]
+                .slice(
+                  currentPage === 1 ? currentPage : currentPage - 2,
+                  currentPage + 2,
+                )
+                .map((_, index) => {
+                  const page = index + 1;
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => goToPage(page)}
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                          currentPage === page
+                            ? " text-black bg-purple-600"
+                            : " text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+              <PaginationItem>
+                <PaginationNext onClick={() => goToPage(currentPage + 1)} />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+          {/* <button
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="px-3 py-2 rounded-md border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next
-          </button>
+          </button> */}
         </div>
 
         <div className="text-center mt-4 text-sm text-gray-600">

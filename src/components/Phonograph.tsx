@@ -463,7 +463,7 @@ const Phonograph = ({ phones }: { phones: PhoneType[] }) => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPlaying, maxTime]);
+  }, [currentTime, isPlaying, maxTime]);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);

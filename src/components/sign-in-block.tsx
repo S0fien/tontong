@@ -50,7 +50,7 @@ const SignInBlock = () => {
 
   const handleInputChange = (
     field: keyof SignInFormData,
-    value: string | boolean
+    value: string | boolean,
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -72,7 +72,7 @@ const SignInBlock = () => {
     });
     setUser({ userInfos: data.user!, session: data.session! });
     console.log("Registration response:", data);
-    navigate({to: '/dashboard'});
+    navigate({ to: "/dashboard" });
     // const queryClient = useQueryClient();
 
     // return useMutation({

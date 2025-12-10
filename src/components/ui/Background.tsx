@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "./../../lib/utils";
 
 export const BackgroundGradientAnimation = ({
@@ -39,14 +39,15 @@ export const BackgroundGradientAnimation = ({
   const [curY, setCurY] = useState(0);
   const [tgX, setTgX] = useState(0);
   const [tgY, setTgY] = useState(0);
-  useEffect(() => {
+
+  const start = useCallback(() => {
     document.body.style.setProperty(
       "--gradient-background-start",
-      gradientBackgroundStart
+      gradientBackgroundStart,
     );
     document.body.style.setProperty(
       "--gradient-background-end",
-      gradientBackgroundEnd
+      gradientBackgroundEnd,
     );
     document.body.style.setProperty("--first-color", firstColor);
     document.body.style.setProperty("--second-color", secondColor);
@@ -56,7 +57,21 @@ export const BackgroundGradientAnimation = ({
     document.body.style.setProperty("--pointer-color", pointerColor);
     document.body.style.setProperty("--size", size);
     document.body.style.setProperty("--blending-value", blendingValue);
-  }, []);
+  }, [
+    blendingValue,
+    fifthColor,
+    firstColor,
+    fourthColor,
+    gradientBackgroundEnd,
+    gradientBackgroundStart,
+    pointerColor,
+    secondColor,
+    size,
+    thirdColor,
+  ]);
+  useEffect(() => {
+    start();
+  }, [start]);
 
   useEffect(() => {
     function move() {
@@ -66,12 +81,12 @@ export const BackgroundGradientAnimation = ({
       setCurX(curX + (tgX - curX) / 20);
       setCurY(curY + (tgY - curY) / 20);
       interactiveRef.current.style.transform = `translate(${Math.round(
-        curX
+        curX,
       )}px, ${Math.round(curY)}px)`;
     }
 
     move();
-  }, [tgX, tgY]);
+  }, [curX, curY, tgX, tgY]);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (interactiveRef.current) {
@@ -93,8 +108,8 @@ export const BackgroundGradientAnimation = ({
   return (
     <div
       className={cn(
-        "w-full h-full relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
-        containerClassName
+        "z-50 w-full h-full relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
+        containerClassName,
       )}
     >
       <svg className="hidden">
@@ -119,25 +134,25 @@ export const BackgroundGradientAnimation = ({
       <div
         className={cn(
           "gradients-container h-full w-full blur-lg",
-          isSafari ? "blur-2xl" : "[filter:url(#blurMe)_blur(40px)]"
+          isSafari ? "blur-2xl" : "filter-[url(#blurMe)_blur(40px)]",
         )}
       >
         <div
           className={cn(
             `absolute [background:radial-gradient(circle_at_center,var(--first-color)_0,var(--first-color)_50%)_no-repeat]`,
-            `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
+            `[mix-blend-mode:var(--blending-value)] w-(--size) h-[--size] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `origin-[center_center]`,
             `animate-first`,
-            `opacity-100`
+            `opacity-100`,
           )}
         ></div>
         <div
           className={cn(
-            `absolute [background:radial-gradient(circle_at_center,_rgba(var(--second-color),_0.8)_0,_rgba(var(--second-color),_0)_50%)_no-repeat]`,
-            `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
-            `[transform-origin:calc(50%-400px)]`,
+            `absolute [background:radial-gradient(circle_at_center,rgba(var(--second-color),0.8)_0,rgba(var(--second-color),0)_50%)_no-repeat]`,
+            `[mix-blend-mode:var(--blending-value)] w-(--size) h-[--size] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
+            `origin-[calc(50%-400px)]`,
             `animate-second`,
-            `opacity-100`
+            `opacity-100`,
           )}
         ></div>
         <div
@@ -146,7 +161,7 @@ export const BackgroundGradientAnimation = ({
             `[mix-blend-mode:var(--blending-value)] w-(--size) h-(--size) top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `origin-[calc(50%+400px)]`,
             `animate-third`,
-            `opacity-100`
+            `opacity-100`,
           )}
         ></div>
         <div
@@ -155,16 +170,16 @@ export const BackgroundGradientAnimation = ({
             `[mix-blend-mode:var(--blending-value)] w-(--size) h-(--size) top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `origin-[calc(50%-200px)]`,
             `animate-fourth`,
-            `opacity-70`
+            `opacity-70`,
           )}
         ></div>
         <div
           className={cn(
             `absolute [background:radial-gradient(circle_at_center,rgba(var(--fifth-color),0.8)_0,rgba(var(--fifth-color),0)_50%)_no-repeat]`,
-            `[mix-blend-mode:var(--blending-value)] w-(--size) h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
+            `[mix-blend-mode:var(--blending-value)] w-(--size) h-[--size] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `origin-[calc(50%-800px)_calc(50%+800px)]`,
             `animate-fifth`,
-            `opacity-100`
+            `opacity-100`,
           )}
         ></div>
 
@@ -174,8 +189,8 @@ export const BackgroundGradientAnimation = ({
             onMouseMove={handleMouseMove}
             className={cn(
               `absolute [background:radial-gradient(circle_at_center,rgba(var(--pointer-color),0.8)_0,rgba(var(--pointer-color),0)_50%)_no-repeat]`,
-              `[mix-blend-mode:var(--blending-value)] w-full h-full -top-1/2 -left-1/2`,
-              `opacity-70`
+              `[mix-blend-mode:var(--blending-value)] -top-1/2 -left-1/2`,
+              `opacity-70`,
             )}
           ></div>
         )}

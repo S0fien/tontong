@@ -1,27 +1,21 @@
-import React from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Loader } from "../components/Loader";
 import useOutputIndex from "../hooks/useApp";
-import MonologueDetail from "./MonologueDetail";
 
-const Monologues: React.FC = () => {
-  const { itemsCache, loadingIndex } = useOutputIndex();
-
-  if (loadingIndex || Object.entries(itemsCache).length === 0) {
-    return <div className="text-white text-2xl">Loading...</div>;
-  }
-
-  return (
-    <div className="flex flex-col justify-center items-center w-full h-fit">
-      <MonologueDetail />
-      {/* Main Card */}
-      {/* <Card
-        isLoading={
-          loadingIndex || !currentEntry || !itemsCache[currentEntry.id]
-        }
-        loadingItemId={loadingItemId ?? ""}
-        currentCard={currentCard!}
-      /> */}
-    </div>
-  );
+const Monologue = () => {
+  const { indexList, loadingIndex } = useOutputIndex();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loadingIndex) navigate({ to: "/monologues/" + indexList[0].id });
+  }, [indexList, loadingIndex, navigate]);
+  if (loadingIndex)
+    return (
+      <div className="text-white text-2xl">
+        <Loader />
+      </div>
+    );
+  return <></>;
 };
 
-export default Monologues;
+export default Monologue;

@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 
 interface User {
   id?: string;
-  session: AuthResponsePassword["data"]["session"]
+  session: AuthResponsePassword["data"]["session"];
   userInfos: AuthResponsePassword["data"]["user"];
   // add other user fields as needed
 }
@@ -55,6 +55,6 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "app-store", // localStorage key
-    }
-  )
+    },
+  ),
 );

@@ -6,7 +6,7 @@ export const CardBody = ({
   isFlipped,
 }: CardBodyProps) => {
   console.log("currentcard", currentCard);
-  const  audio = currentCard && currentCard ? currentCard.audio : undefined;
+  const audio = currentCard && currentCard ? currentCard.audio : undefined;
   return (
     <>
       {/* Front Side */}
@@ -16,14 +16,16 @@ export const CardBody = ({
         }`}
       >
         <div className="px-8 py-4">
-          <h2 className="text-4xl font-bold text-gray-800 mb-6">
+          <h2 className="text-3xl text-purple-600 mb-3 leading-relaxed font-bold">
             {audio
               ? audio.translation
               : loadingItemId
-              ? "Loading..."
-              : "No data"}
+                ? "Loading..."
+                : "No data"}
           </h2>
-          <p className="text-2xl text-gray-400">{audio ? audio.pivot : ""}</p>
+          <p className="text-1xl text-gray-400 italic">
+            {audio ? audio.pivot : ""}
+          </p>
         </div>
       </div>
 
@@ -34,8 +36,8 @@ export const CardBody = ({
             {audio
               ? audio.transcript
               : loadingItemId
-              ? "Loading..."
-              : "No data"}
+                ? "Loading..."
+                : "No data"}
           </h2>
         </div>
       </div>

@@ -1,9 +1,14 @@
-import { LoaderCircle, type LucideProps } from "lucide-react";
+import { type LucideProps } from "lucide-react";
+import { Dots } from "./ui/Spinner";
 
-export const Loader = ({ className, size = 20, color = "purple" }: LucideProps) => {
+export const Loader = ({
+  className,
+  size = 20,
+  color = "purple",
+}: LucideProps) => {
   return (
-    <>
-      <LoaderCircle size={size} color={color} className={`m-auto animate-spin ${className}` }/>
-    </>
+    <div className={`text-${color} size-${size} ${className}`}>
+      <Dots variant="v3"/>
+    </div>
   );
 };

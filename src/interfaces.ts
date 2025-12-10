@@ -1,12 +1,30 @@
+export interface AudioFileType {
+  start: number;
+  end: number;
+  duration: number;
+}
+
+export type AudioType = {
+  transcript: string;
+  pivot: string;
+  translation: string;
+  json: string;
+  path?: string;
+} & AudioFileType;
+
+export type WordType = {
+  word: string;
+} & AudioFileType;
+
 export interface CardType {
-  id?: string;
-  word: any;
-  phone: any;
-  audio: any; // public URL to the audio file
+  id: string;
+  word: WordType[];
+  phone: PhoneType[];
+  audio: AudioType;
 }
 
 export interface PhoneType {
-  phone: any;
+  phone: string;
   start: number;
   end: number;
   duration: number;
@@ -27,32 +45,4 @@ export interface CardBodyProps {
   currentCard?: CardType | undefined;
   loadingItemId?: string;
   isFlipped?: boolean;
-}
-export interface JsonEntry {
-  pivot: string;
-  transcript: string;
-  translation: string;
-  start: number;
-  end: number;
-  duration: number;
-}
-
-export type CacheEntry = JsonEntry & {
-  audio: any;
-  word: any;
-  phone: PhoneType[];
-};
-
-export interface IndexEntry {
-  id: string;
-  text: string;
-  word: any;
-  phone: any;
-  audio: any; // public URL to the audio file
-  transcript: string;
-  pivot: string;
-  translation: string;
-  folder: string;
-  json: string;
-  files: string[];
 }

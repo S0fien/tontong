@@ -4,7 +4,10 @@ import Grammar from "./pages/Grammar";
 import History from "./pages/History";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Monologues from "./pages/Monologues";
+import {
+  default as Monologue,
+  default as Monologues,
+} from "./pages/Monologues";
 import { useAppStore } from "./store";
 
 export const grammarRoute = new Route({
@@ -48,7 +51,7 @@ export const indexRoute = new Route({
 export const monologuesRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/monologues",
-  component: Monologues,
+  component: Monologue,
 });
 
 // Individual monologue detail route

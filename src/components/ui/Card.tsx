@@ -55,7 +55,7 @@ export const Card = ({
             isFlipped ? "transform-[rotateY(180deg)]" : ""
           }`}
         >
-          {isLoading ? <Loader size={80} className="my-12" /> : <>{Body}</>}
+          {isLoading ? <Loader size={"80"} className="my-12" /> : <>{Body}</>}
         </div>
         {Footer}
       </div>
