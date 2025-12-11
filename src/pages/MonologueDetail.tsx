@@ -55,16 +55,16 @@ const MonologueDetail = () => {
   const handlePrevious = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
     if (currentIdx > 0) {
-      navigate({ to: `/monologues/${indexList[currentIdx - 1].id}` });
+      navigate({ to: `/monologues?${indexList[currentIdx - 1].id}` });
     } else if (indexList.length > 0) {
-      navigate({ to: `/monologues/${indexList[indexList.length - 1].id}` });
+      navigate({ to: `/monologues?${indexList[indexList.length - 1].id}` });
     }
   };
 
   const handleNext = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
     if (currentIdx !== -1) {
-      navigate({ to: `/monologues/${indexList[currentIdx + 1].id}` });
+      navigate({ to: `/monologues?${indexList[currentIdx + 1].id}` });
     }
   };
 
