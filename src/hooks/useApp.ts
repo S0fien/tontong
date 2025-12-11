@@ -99,10 +99,10 @@ export function useOutputIndex() {
         setLoadingIndex(false);
 
         // optionally preload first item
-        if (index && index[0] && index[0].json) {
+        if (index && index[0] && index[0].audio.json) {
           setLoadingItemId(index[0].id);
           try {
-            const { data } = await jo.getPublicUrl(index[0].json!);
+            const { data } = await jo.getPublicUrl(index[0].audio.json!);
             if (data.publicUrl) {
               const formattedUrl = data.publicUrl;
               const aaa = await fetch(formattedUrl, { method: "GET" });

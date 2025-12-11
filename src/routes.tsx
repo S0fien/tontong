@@ -5,7 +5,6 @@ import History from "./pages/History";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import MonologueDetail from "./pages/MonologueDetail";
-import { default as Monologue } from "./pages/Monologues";
 import { useAppStore } from "./store";
 
 export const grammarRoute = new Route({
@@ -46,17 +45,17 @@ export const indexRoute = new Route({
   component: Home,
 });
 
-// Monologues list route
-export const monologuesRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: "/monologues",
-  component: Monologue,
-});
+// // Monologues list route
+// export const monologuesRoute = new Route({
+//   getParentRoute: () => rootRoute,
+//   path: "/monologues",
+//   component: Monologue,
+// });
 
 // Individual monologue detail route
 export const monologueDetailRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: "/monologues?$id",
+  path: "/monologues",
   component: MonologueDetail,
 });
 
@@ -69,7 +68,6 @@ export const historyRoute = new Route({
 // Create the route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
-  monologuesRoute,
   monologueDetailRoute,
   historyRoute,
   loginRoote,

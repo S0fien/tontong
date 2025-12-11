@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useLocation, useRouter } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "../components/Loader";
@@ -6,13 +6,18 @@ import Phonograph from "../components/Phonograph";
 import { Card } from "../components/ui/Card";
 import { CardBody } from "../components/ui/CardBody";
 import { CardFooter } from "../components/ui/CardFooter";
+import { Dots } from "../components/ui/Spinner";
 import useOutputIndex from "../hooks/useApp";
 import type { CardType } from "../interfaces";
 
 const MonologueDetail = () => {
-  const { id: idParam } = useParams({ strict: false });
+  const { pathname, search, state } = useLocation();
+  console.log(pathname, search, state);
+  const params = search as { id: string };
 
-  const navigate = useNavigate();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const {
     indexList,
     itemsCache,
@@ -22,10 +27,29 @@ const MonologueDetail = () => {
     currentEntry,
     loadingItemId,
   } = useOutputIndex();
-  const id = idParam;
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const id = params!.id!;
+
+  const { navigate } = useRouter();
+
+  // Load the item's data on mount
+  useEffect(() => {
+    if (loadingItemId === "null" || !loadingItemId) return;
+    loadItem(loadingItemId);
+  }, [currentEntry, itemsCache, loadItem, loadingItemId]);
+
+  useEffect(() => {
+    if (!loadingIndex)
+      setCurrentEntry(indexList.find((item) => item.id === id) || indexList[0]);
+  }, [id, indexList, loadingIndex, setCurrentEntry]);
+  if (loadingIndex || !indexList[0])
+    return <Dots variant="v3" size="40" color="white" />;
+  if (!params.id && indexList[0] && !loadingIndex)
+    return navigate({
+      to: `/monologues?id=` + indexList[0].id,
+      reloadDocument: true,
+      search,
+    });
 
   // Find the entry and its data
   // const currentEntry = /indexList.find((e) => e.id === id);
@@ -41,30 +65,21 @@ const MonologueDetail = () => {
       }
     : undefined;
 
-  // Load the item's data on mount
-  useEffect(() => {
-    if (loadingItemId === "null" || !loadingItemId) return;
-    loadItem(loadingItemId);
-  }, [currentEntry, itemsCache, loadItem, loadingItemId]);
-
-  useEffect(() => {
-    if (!loadingIndex)
-      setCurrentEntry(indexList.find((item) => item.id === id) || indexList[0]);
-  }, [id, indexList, loadingIndex, setCurrentEntry]);
-
   const handlePrevious = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
     if (currentIdx > 0) {
-      navigate({ to: `/monologues?${indexList[currentIdx - 1].id}` });
+      navigate({ to: `/monologues?id=${indexList[currentIdx - 1].id}` });
     } else if (indexList.length > 0) {
-      navigate({ to: `/monologues?${indexList[indexList.length - 1].id}` });
+      navigate({
+        to: `/monologues?id=${indexList[indexList.length - 1].id}`,
+      });
     }
   };
 
   const handleNext = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
     if (currentIdx !== -1) {
-      navigate({ to: `/monologues?${indexList[currentIdx + 1].id}` });
+      navigate({ to: `/monologues?id=${indexList[currentIdx + 1].id}` });
     }
   };
 
@@ -90,7 +105,7 @@ const MonologueDetail = () => {
         <div className="text-white text-2xl">Monologue not found</div>
       </div>
     );
-  } else if (!currentEntry)
+  } else if (!currentCard)
     return (
       <div className="size-full flex items-center justify-center ">
         <div className="text-white text-2xl">
@@ -143,7 +158,7 @@ const MonologueDetail = () => {
         }
         body={<CardBody />}
         isLoading={!currentEntry}
-        loadingItemId={currentEntry.id ?? ""}
+        loadingItemId={currentCard.id ?? ""}
         currentCard={currentCard}
       ></Card>
 
