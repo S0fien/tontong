@@ -12,7 +12,7 @@ function App() {
   const { indexList, loadingIndex } = useOutputIndex();
   const { setIndex } = useAppStore();
   useEffect(() => {
-    if (!loadingIndex && indexList.length > 0) setIndex(indexList);
+    if (!loadingIndex && indexList.length === 0) setIndex(indexList);
   }, [indexList, loadingIndex, setIndex]);
   return (
     <QueryClientProvider client={queryClient}>

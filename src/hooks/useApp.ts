@@ -86,18 +86,14 @@ export function useOutputIndex() {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentEntry, setCurrentEntry] = useState<CardType>();
 
-  console.log("index", index);
   useEffect(() => {
     let mounted = true;
     async function loadIndex() {
       try {
-        console.log("loli", indexList.length);
-
         const jo = await supabase.storage.from(ASSETS_BUCKETS);
         const { data } = await jo.getPublicUrl("index.json");
         const truc = await fetch(data.publicUrl!, { method: "GET" });
         const index = await truc.json();
-        console.log("index", index);
         if (!mounted) return;
         setIndexList(index || []);
         setLoadingIndex(false);
@@ -107,16 +103,12 @@ export function useOutputIndex() {
           setLoadingItemId(index[0].id);
           try {
             const { data } = await jo.getPublicUrl(index[0].json!);
-            console.log("data", data);
             if (data.publicUrl) {
-              console.log("data", data.publicUrl);
-
               const formattedUrl = data.publicUrl;
               const aaa = await fetch(formattedUrl, { method: "GET" });
               const jo2 = await aaa.json();
               jo2.id = index[0].json;
 
-              console.log("jojo", jo2);
               if (mounted) {
                 setItemsCache((p) => [...p, jo2]);
                 setCurrentEntry(index[0]);
@@ -166,12 +158,10 @@ export function useOutputIndex() {
         indexList.find((e) => e.id === id)!.audio.json,
       );
       const formattedUrl = data.publicUrl!;
-      console.log("formated", formattedUrl);
       const aaa = await fetch(formattedUrl, { method: "GET" });
       const jo2 = await aaa.json();
 
       jo2.id = jo2.audio.json;
-      console.log("jo", jo2);
       setTimeout(() => {
         setItemsCache((p) => [...p, jo2]);
         // set the currently loaded entry so consumers can read it

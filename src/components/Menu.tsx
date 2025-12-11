@@ -1,20 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { FileText, History, List, MessageSquare, Smile } from "lucide-react";
-import { useCallback, useEffect } from "react";
-import { useSupabase } from "../hooks/useSupabase";
 import { Button } from "./ui/button";
 
 export default function Menu() {
-  const { query } = useSupabase();
-
-  const fetchData = useCallback(async () => {
-    const data = await query("users", { limit: 100 });
-    console.log("data", data);
-  }, [query]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
   return (
     <div
       className="bg-gray-200/20 backdrop-blur-2xl rounded-3xl p-4 w-full max-w-3xl shadow-2xl

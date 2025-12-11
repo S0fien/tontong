@@ -28,7 +28,7 @@ const SignInBlock = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
-  const { setUser, user } = useAppStore();
+  const { setUser } = useAppStore();
   const navigate = useNavigate();
 
   const validateForm = (): boolean => {
@@ -71,7 +71,6 @@ const SignInBlock = () => {
       password: formData.password,
     });
     setUser({ userInfos: data.user!, session: data.session! });
-    console.log("Registration response:", data);
     navigate({ to: "/dashboard" });
     // const queryClient = useQueryClient();
 
@@ -85,7 +84,6 @@ const SignInBlock = () => {
     // });
   };
 
-  console.log("user", user);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -98,8 +96,6 @@ const SignInBlock = () => {
 
     // 🔹 Simulate a fake request
     setTimeout(() => {
-      console.log("Form submitted:", formData);
-
       if (formData.rememberMe) {
         localStorage.setItem("rememberMe", "true");
       }

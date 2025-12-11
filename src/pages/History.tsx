@@ -30,11 +30,9 @@ export default function History() {
   const totalPages = Math.ceil(indexList.length / entriesPerPage);
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
-  console.log("indexlist", indexList);
   const entries = indexList.slice(indexOfFirstEntry, indexOfLastEntry);
   // const ids = entries.map((entry) => entry.audio.json);
 
-  console.log("entries", entries, itemsCache);
   const goToPage = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });

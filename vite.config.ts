@@ -1,17 +1,24 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";      
-
+import path, { resolve } from "path";
+import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
-    minify: false,
+    assetsDir: "",
+    minify: true,
     rollupOptions: {
-      preserveEntrySignatures: "allow-extension",
+      input: {
+        main: resolve(path.dirname("."), "index.html"),
+        nested: resolve(path.dirname("."), "index.html"),
+      },
+      preserveSymlinks: true,
+      preserveEntrySignatures: "exports-only",
       output: {
-        compact: true,
+        assetFileNames: "hihi",
+        preserveModulesRoot: "/src",
         preserveModules: true,
       },
     },

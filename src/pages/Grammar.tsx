@@ -28,7 +28,6 @@ interface Grammar {
 
 const soso = Object.values(GRAMMAR);
 
-console.log("soso", soso);
 const ddsq = Array.from(
   new Set(
     Object.entries(GRAMMAR).map((curr) => {

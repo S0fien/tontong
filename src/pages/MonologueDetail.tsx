@@ -12,7 +12,6 @@ import type { CardType } from "../interfaces";
 const MonologueDetail = () => {
   const { id: idParam } = useParams({ strict: false });
 
-  console.log("id param", idParam);
   const navigate = useNavigate();
   const {
     indexList,
@@ -28,10 +27,8 @@ const MonologueDetail = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  console.log("itemscache", itemsCache);
   // Find the entry and its data
   // const currentEntry = /indexList.find((e) => e.id === id);
-  console.log("useIfFeting", currentEntry, loadingItemId);
   const currentCard: CardType | undefined = currentEntry
     ? {
         id: currentEntry.id,
@@ -44,11 +41,6 @@ const MonologueDetail = () => {
       }
     : undefined;
 
-  console.log(
-    "currentcard",
-    id,
-    itemsCache.find((item) => item.id === id),
-  );
   // Load the item's data on mount
   useEffect(() => {
     if (loadingItemId === "null" || !loadingItemId) return;
@@ -72,14 +64,11 @@ const MonologueDetail = () => {
   const handleNext = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
     if (currentIdx !== -1) {
-      console.log("arf", currentIdx, indexList[currentIdx + 1].id);
-
       navigate({ to: `/monologues/${indexList[currentIdx + 1].id}` });
     }
   };
 
   const handlePlay = () => {
-    console.log("handle play");
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
@@ -95,7 +84,6 @@ const MonologueDetail = () => {
     setIsPlaying(false);
   };
 
-  console.log("meee", isPlaying);
   if (!id) {
     return (
       <div className="size-full flex items-center justify-center ">
@@ -115,59 +103,49 @@ const MonologueDetail = () => {
 
   return (
     <div className="min-h-screen py-8 relative  flex flex-col justify-center items-center w-full">
-      {/* Back Button */}
-      <div className="absolute top-6 left-6">
-        <button
-          onClick={() => navigate({ to: "/monologues" })}
-          className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-3 shadow-lg transition transform hover:scale-110"
-          aria-label="Back to list"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-      </div>
-
       {/* Main Card */}
       <Card
         // header={
         //   <CardHeader />
         // }
-        footer={<CardFooter />}
+        footer={
+          <CardFooter>
+            <div className="flex w-[250px] m-auto justify-around py-2 items-center">
+              <button
+                onClick={handlePrevious}
+                className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
+                aria-label="Previous monologue"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={handlePlay}
+                className={`${
+                  isPlaying ? "bg-purple-600" : "bg-white"
+                } hover:bg-purple-100 ${
+                  isPlaying ? "text-white" : "text-purple-700"
+                } rounded-full p-4 shadow-xl transition transform hover:scale-110`}
+                aria-label={isPlaying ? "Pause audio" : "Play audio"}
+              >
+                <Play className="w-8 h-8" fill="currentColor" />
+              </button>
+
+              <button
+                onClick={handleNext}
+                className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
+                aria-label="Next monologue"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </CardFooter>
+        }
         body={<CardBody />}
         isLoading={!currentEntry}
         loadingItemId={currentEntry.id ?? ""}
         currentCard={currentCard}
-      />
-
-      {/* Navigation Buttons */}
-      <div className="flex w-[500px] mx-auto justify-around items-center mt-8">
-        <button
-          onClick={handlePrevious}
-          className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
-          aria-label="Previous monologue"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-
-        <button
-          onClick={handlePlay}
-          className={`${
-            isPlaying ? "bg-purple-600" : "bg-white"
-          } hover:bg-purple-100 ${
-            isPlaying ? "text-white" : "text-purple-700"
-          } rounded-full p-4 shadow-xl transition transform hover:scale-110`}
-          aria-label={isPlaying ? "Pause audio" : "Play audio"}
-        >
-          <Play className="w-8 h-8" fill="currentColor" />
-        </button>
-
-        <button
-          onClick={handleNext}
-          className="bg-white hover:bg-purple-100 text-purple-700 rounded-full p-4 shadow-lg transition transform hover:scale-110"
-          aria-label="Next monologue"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
+      ></Card>
 
       <Phonograph playing={isPlaying} phones={currentCard?.phone || []} />
       {/* Progress Indicator */}

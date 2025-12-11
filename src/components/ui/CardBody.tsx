@@ -5,7 +5,6 @@ export const CardBody = ({
   loadingItemId,
   isFlipped,
 }: CardBodyProps) => {
-  console.log("currentcard", currentCard);
   const audio = currentCard && currentCard ? currentCard.audio : undefined;
   return (
     <>
