@@ -1,28 +1,37 @@
+import netlify from "@netlify/vite-plugin";
+import netlifyTanstack from "@netlify/vite-plugin-tanstack-start";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import path, { resolve } from "path";
 import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  build: {
-    assetsDir: "",
-    minify: true,
-    rollupOptions: {
-      input: {
-        main: resolve(path.dirname("."), "index.html"),
-        nested: resolve(path.dirname("."), "index.html"),
-      },
-      preserveSymlinks: true,
-      preserveEntrySignatures: "exports-only",
-      output: {
-        assetFileNames: "hihi",
-        preserveModulesRoot: "/src",
-        preserveModules: true,
-      },
-    },
-  },
+  plugins: [
+    react(),
+    tailwindcss(),
+    netlify({ redirects: { enabled: true } }),
+    netlifyTanstack(),
+  ],
+  // build: {
+  //   assetsDir: ".",
+  //   lib: {
+  //     // Could also be a dictionary or array of multiple entry points
+  //     entry: resolve(__dirname, "src/routes.tsx"),
+  //     name: "MyLib",
+  //     // the proper extensions will be added
+  //     fileName: "my-lib",
+  //   },
+
+  //   rollupOptions: {
+  //     preserveSymlinks: true,
+  //     preserveEntrySignatures: "exports-only",
+  //     output: {
+  //       inlineDynamicImports: true,
+  //       // assetFileNames: "hihi",
+  //       preserveModulesRoot: ".",
+  //     },
+  //   },
+  // },
 
   server: {
     allowedHosts: ["all", "*", "326bab1b924b81.lhr.life"],

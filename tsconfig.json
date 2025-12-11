@@ -9,7 +9,6 @@
     "strict": false,
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "moduleResolution": "nodenext"
+    }
   }
 }

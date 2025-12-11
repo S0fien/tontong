@@ -16,7 +16,7 @@ export const grammarRoute = new Route({
 // Root layout route
 export const rootRoute = new RootRoute({
   component: App,
-  
+
   beforeLoad: async ({ location }) => {
     const user = useAppStore.getState().user;
     if (location.pathname === "/") {
