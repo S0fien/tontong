@@ -1,25 +1,29 @@
 import { RotateCcw } from "lucide-react";
 import type { ReactElement, ReactNode } from "react";
 import type { CardFooterProps } from "../../interfaces";
+import { cn } from "../../lib/utils";
 
 export const CardFooter = ({
   isLoading,
   //   isFlipped,
   onFlip,
   children,
-}: CardFooterProps & { children?: ReactElement }) => {
-  console.log("props", children);
+  className,
+}: CardFooterProps & { children?: ReactElement; className?: string }) => {
   const childs = children?.props as {
     children: ReactNode[];
     className: string;
   };
-  console.log("childs", childs);
   const list = childs?.children;
-  console.log("list", list);
-  const { className } = childs;
-  console.log("classnale", className);
+  const { className: classy } = childs;
+  
   return (
-    <div className="bg-purple-100/50 px-1 pt-1 pb-10 h-max-22 flex relative justify-end items-center">
+    <div
+      className={cn(
+        "bg-purple-100/50 px-1 py-3 h-max-22 flex relative justify-end items-center",
+        className,
+      )}
+    >
       {!isLoading && (
         <>
           <button
@@ -30,8 +34,8 @@ export const CardFooter = ({
           >
             <RotateCcw className="w-6 h-6" />
           </button>
-          {className && list && (
-            <div className={className}>
+          {classy && list && (
+            <div className={classy}>
               {list.map((el) => (
                 <>{el}</>
               ))}

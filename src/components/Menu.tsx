@@ -9,7 +9,6 @@ import { Button } from "./ui/button";
 export default function Menu() {
   const { setLastMonologue, lastMonologue } = useAppStore();
 
-  console.log("last", lastMonologue);
   const { indexList } = useOutputIndex();
   useEffect(() => {
     if (!lastMonologue && indexList.length > 1) {

@@ -45,12 +45,12 @@ export const Card = ({
       })
     : null;
   return (
-    <div className="w-full max-w-2xl justify-center">
+    <div className="w-full justify-center">
       <div className="bg-white/70 rounded-3xl shadow-2xl overflow-hidden perspective-[1000px]">
         {Header}
 
         <div
-          className={`min-h-[100px] flex flex-col justify-center transition-transform duration-700 transform-3d ${
+          className={`min-h-[100px] flex justify-between transition-transform duration-700 transform-3d ${
             isFlipped ? "transform-[rotateY(180deg)]" : ""
           }`}
         >

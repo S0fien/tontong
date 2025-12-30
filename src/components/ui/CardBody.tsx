@@ -1,10 +1,12 @@
+import type { JSX } from "react";
 import type { CardBodyProps } from "../../interfaces";
 
 export const CardBody = ({
+  children,
   currentCard,
   loadingItemId,
   isFlipped,
-}: CardBodyProps) => {
+}: CardBodyProps & { children?: JSX.Element }) => {
   const audio = currentCard && currentCard ? currentCard.audio : undefined;
   return (
     <>
@@ -40,6 +42,8 @@ export const CardBody = ({
           </h2>
         </div>
       </div>
+
+      {children}
     </>
   );
 };

@@ -75,17 +75,14 @@ export const useAuth = () => {
   };
 };
 
-// ---------------------- Output index hook (same API as previous useOutputIndex) ----------------------
+// ---------------------- Output index hook (simplified - index only) ----------------------
 
 export function useOutputIndex() {
   const { index } = useAppStore();
 
   const [indexList, setIndexList] = useState<CardType[]>(index);
-  const [itemsCache, setItemsCache] = useState<CardType[]>([]);
   const [loadingIndex, setLoadingIndex] = useState<boolean>(true);
-  const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [currentEntry, setCurrentEntry] = useState<CardType>();
+  const [currentEntry, setCurrentEntry] = useState<CardType | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -100,7 +97,7 @@ export function useOutputIndex() {
         const jsonFile = lala.file("index.json");
         if (!jsonFile) {
           console.error("no jsonfile");
-          throw new Error("aaaarg");
+          throw new Error("index.json not found in zip");
         }
         const content = await jsonFile.async("text");
         const index = JSON.parse(content);
@@ -108,28 +105,9 @@ export function useOutputIndex() {
         setIndexList(index || []);
         setLoadingIndex(false);
 
-        // optionally preload first item
-        if (index && index[0] && index[0].audio.json) {
-          setLoadingItemId(index[0].id);
-          try {
-            const { data } = await jo.getPublicUrl(index[0].audio.json!);
-            if (data.publicUrl) {
-              const formattedUrl = data.publicUrl;
-              const aaa = await fetch(formattedUrl, { method: "GET" });
-              const jo2 = await aaa.json();
-              jo2.id = index[0].json;
-
-              if (mounted) {
-                setItemsCache((p) => [...p, jo2]);
-                setCurrentEntry(index[0]);
-              }
-            }
-          } catch (e: unknown) {
-            // ignore
-            console.log("error", e);
-          } finally {
-            if (mounted) setLoadingItemId(null);
-          }
+        // Optionally set the first entry as current
+        if (index && index[0]) {
+          setCurrentEntry(index[0]);
         }
       } catch (err) {
         console.error("useOutputIndex loadIndex error", err);
@@ -142,60 +120,20 @@ export function useOutputIndex() {
     };
   }, []);
 
-  async function loadItems(ids: string[]) {
-    const promises = ids.map((prom) => {
-      return new Promise((resolve) => loadItem(prom).then(() => resolve));
-    });
-
-    for (const p of promises) {
-      // await each promise sequentially to avoid flooding
-
-      await p;
-    }
-  }
-
-  async function loadItem(id: string) {
-    setLoading(true);
-    if (!indexList || !indexList.length) return;
-    if (itemsCache.find((item) => item.audio.json === id)) return; // already loaded
+  // Simplified: just set the current entry from the index
+  function selectItem(id: string) {
     const entry = indexList.find((e) => e.id === id);
-    if (!entry || !entry.audio.json) return;
-    try {
-      setLoadingItemId(id);
-      const jo = await supabase.storage.from(ASSETS_BUCKETS);
-
-      const { data } = await jo.getPublicUrl(
-        indexList.find((e) => e.id === id)!.audio.json,
-      );
-      const formattedUrl = data.publicUrl!;
-      const aaa = await fetch(formattedUrl, { method: "GET" });
-      const jo2 = await aaa.json();
-
-      jo2.id = jo2.audio.json;
-      setTimeout(() => {
-        setItemsCache((p) => [...p, jo2]);
-        // set the currently loaded entry so consumers can read it
-        const entry = indexList.find((e) => e.id === id) ?? null;
-        if (entry) setCurrentEntry(jo2);
-      }, 500);
-    } catch (err) {
-      console.error("useOutputIndex loadItem failed", err);
-    } finally {
-      setLoadingItemId((curr) => (curr === id ? null : curr));
-      setLoading(false);
+    if (entry) {
+      setCurrentEntry(entry);
     }
   }
 
   return {
-    loading,
     indexList,
-    itemsCache,
     loadingIndex,
-    loadingItemId,
     currentEntry,
-    loadItem,
     setCurrentEntry,
-    loadItems,
+    selectItem,
   } as const;
 }
 

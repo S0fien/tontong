@@ -15,25 +15,18 @@ const MonologueDetail = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const {
-    indexList,
-    itemsCache,
-    loadItem,
-    setCurrentEntry,
-    loadingIndex,
-    currentEntry,
-    loadingItemId,
-  } = useOutputIndex();
+  const { indexList, setCurrentEntry, loadingIndex, currentEntry } =
+    useOutputIndex();
 
   const id = params;
 
   const { navigate } = useRouter();
 
   // Load the item's data on mount
-  useEffect(() => {
-    if (loadingItemId === "null" || !loadingItemId) return;
-    loadItem(loadingItemId);
-  }, [currentEntry, itemsCache, loadItem, loadingItemId]);
+  // useEffect(() => {
+  //   if (loadingItemId === "null" || !loadingItemId) return;
+  //   loadItem(loadingItemId);
+  // }, [currentEntry, itemsCache, loadItem, loadingItemId]);
 
   useEffect(() => {
     if (!loadingIndex)
@@ -60,7 +53,7 @@ const MonologueDetail = () => {
       navigate({ to: `/monologues/${indexList[currentIdx - 1].id}` });
     } else if (indexList.length > 0) {
       navigate({
-        to: `/monologues?id=${indexList[indexList.length - 1].id}`,
+        to: `/monologues/${indexList[indexList.length - 1].id}`,
       });
     }
   };
@@ -93,7 +86,7 @@ const MonologueDetail = () => {
   const currentIdx = indexList.findIndex((e) => e.id === id);
 
   return (
-    <div className="min-h-screen py-8 relative  flex flex-col justify-center items-center w-full">
+    <div className="min-h-screen max-w-10xl py-8 relative  flex flex-col justify-center items-center">
       {/* Main Card */}
       <Card
         // header={

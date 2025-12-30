@@ -150,7 +150,8 @@ const Grammar = () => {
                       const isCompleted = completedTopics.has(cefr);
 
                       const dqsdsd = indexList[ix];
-                      if (!dqsdsd) return <Loader />;
+                      if (!dqsdsd)
+                        return <Loader className="m-auto" color="white" />;
 
                       return (
                         <Accordion collapsible type="single" key={ix}>

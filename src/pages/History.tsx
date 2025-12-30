@@ -22,7 +22,7 @@ export default function History() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const { indexList, itemsCache, loadingIndex } = useOutputIndex();
+  const { indexList, loadingIndex } = useOutputIndex();
 
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 10;
@@ -169,8 +169,6 @@ export default function History() {
             </div>
           )}
           {!loadingIndex &&
-            itemsCache &&
-            itemsCache.length < 11 &&
             entries.map((entry) => {
               return (
                 <div
@@ -189,30 +187,39 @@ export default function History() {
                       //   <CardHeader />
                       // }
                       footer={
-                        <CardFooter>
+                        <CardFooter className="py-6">
                           <></>
                         </CardFooter>
                       }
-                      body={<CardBody />}
+                      body={
+                        <CardBody
+                          children={
+                            <>
+                              <button
+                                onClick={handlePlay}
+                                className={`${
+                                  isPlaying ? "bg-purple-600" : "bg-white"
+                                } hover:bg-purple-100 ${
+                                  isPlaying ? "text-white" : "text-purple-700"
+                                } rounded-full p-4 mx-3  my-auto h-min shadow-xl transition transform hover:scale-110`}
+                                aria-label={
+                                  isPlaying ? "Pause audio" : "Play audio"
+                                }
+                              >
+                                <Play className="w-8 h-8" fill="currentColor" />
+                              </button>
+                              <audio
+                                ref={audioRef}
+                                src={`https://cjogyxlcgjmhhjzxigma.supabase.co/storage/v1/object/public/assets/${entry.id}-audio.ogg`}
+                                onEnded={handleAudioEnded}
+                              />
+                            </>
+                          }
+                        ></CardBody>
+                      }
                       isLoading={!entry}
                       loadingItemId={entry.id ?? ""}
                       currentCard={entry}
-                    />
-                    <button
-                      onClick={handlePlay}
-                      className={`${
-                        isPlaying ? "bg-purple-600" : "bg-white"
-                      } hover:bg-purple-100 ${
-                        isPlaying ? "text-white" : "text-purple-700"
-                      } rounded-full p-4 h-min m-auto shadow-xl transition transform hover:scale-110`}
-                      aria-label={isPlaying ? "Pause audio" : "Play audio"}
-                    >
-                      <Play className="w-8 h-8" fill="currentColor" />
-                    </button>
-                    <audio
-                      ref={audioRef}
-                      src={`https://cjogyxlcgjmhhjzxigma.supabase.co/storage/v1/object/public/assets/${entry.id}-audio.ogg`}
-                      onEnded={handleAudioEnded}
                     />
                   </div>
                 </div>

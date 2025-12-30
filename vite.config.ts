@@ -1,4 +1,3 @@
-import netlify from "@netlify/vite-plugin";
 import netlifyTanstack from "@netlify/vite-plugin-tanstack-start";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
@@ -9,7 +8,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    netlify({ redirects: { enabled: true } }),
+    // netlify({ redirects: { enabled: true } }),
     netlifyTanstack(),
   ],
   // build: {
