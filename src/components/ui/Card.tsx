@@ -45,7 +45,7 @@ export const Card = ({
       })
     : null;
   return (
-    <div className="w-full justify-center">
+    <div className="justify-center max-w-2xl w-full">
       <div className="bg-white/70 rounded-3xl shadow-2xl overflow-hidden perspective-[1000px]">
         {Header}
 

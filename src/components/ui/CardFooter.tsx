@@ -16,7 +16,7 @@ export const CardFooter = ({
   };
   const list = childs?.children;
   const { className: classy } = childs;
-  
+
   return (
     <div
       className={cn(
