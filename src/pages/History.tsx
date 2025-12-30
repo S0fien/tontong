@@ -190,7 +190,11 @@ export default function History() {
                       // header={
                       //   <CardHeader />
                       // }
-                      footer={<CardFooter />}
+                      footer={
+                        <CardFooter>
+                          <></>
+                        </CardFooter>
+                      }
                       body={<CardBody />}
                       isLoading={!entry}
                       loadingItemId={entry.id ?? ""}
