@@ -1,8 +1,26 @@
 import { Link } from "@tanstack/react-router";
 import { FileText, History, List, MessageSquare, Smile } from "lucide-react";
+import { useEffect } from "react";
+import useOutputIndex from "../hooks/useApp";
+import { useAppStore } from "../store";
+import { Loader } from "./Loader";
 import { Button } from "./ui/button";
 
 export default function Menu() {
+  const { setLastMonologue, lastMonologue } = useAppStore();
+
+  console.log("last", lastMonologue);
+  const { indexList } = useOutputIndex();
+  useEffect(() => {
+    if (!lastMonologue && indexList.length > 1) {
+      setLastMonologue(indexList[0].id);
+    }
+  }, [indexList, lastMonologue, setLastMonologue]);
+
+  if (!lastMonologue) return <Loader />;
+
+  const linkUrl = `/monologues/${lastMonologue}`;
+
   return (
     <div
       className="bg-gray-200/20 backdrop-blur-2xl rounded-3xl p-4 w-full max-w-3xl shadow-2xl
@@ -10,7 +28,7 @@ export default function Menu() {
     >
       <div className="grid grid-cols-2 gap-6">
         {/* Monologues - Large Card */}
-        <Link to="/monologues" className="size-full">
+        <Link to={linkUrl} className="size-full">
           <Button
             variant={"brutal"}
             className="rounded-2xl p-3 flex flex-col size-full items-center justify-center  cursor-pointer"

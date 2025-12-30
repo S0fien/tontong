@@ -1,4 +1,4 @@
-import { useLocation, useRouter } from "@tanstack/react-router";
+import { useParams, useRouter } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Phonograph from "../components/Phonograph";
@@ -8,11 +8,9 @@ import { CardFooter } from "../components/ui/CardFooter";
 import { Dots } from "../components/ui/Spinner";
 import useOutputIndex from "../hooks/useApp";
 import type { CardType } from "../interfaces";
-
 const MonologueDetail = () => {
-  const { pathname, search, state } = useLocation();
-  console.log(pathname, search, state);
-  const params = search as { id: string };
+  const { id: params } = useParams({ strict: false });
+  // const params = search as { id: string };
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -27,7 +25,7 @@ const MonologueDetail = () => {
     loadingItemId,
   } = useOutputIndex();
 
-  const id = params!.id!;
+  const id = params;
 
   const { navigate } = useRouter();
 
@@ -41,13 +39,6 @@ const MonologueDetail = () => {
     if (!loadingIndex)
       setCurrentEntry(indexList.find((item) => item.id === id) || indexList[0]);
   }, [id, indexList, loadingIndex, setCurrentEntry]);
-
-  if (!params.id && indexList[0] && !loadingIndex)
-    return navigate({
-      to: `/monologues?id=` + indexList[0].id,
-      reloadDocument: true,
-      search,
-    });
 
   // Find the entry and its data
   // const currentEntry = /indexList.find((e) => e.id === id);
@@ -66,7 +57,7 @@ const MonologueDetail = () => {
   const handlePrevious = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
     if (currentIdx > 0) {
-      navigate({ to: `/monologues?id=${indexList[currentIdx - 1].id}` });
+      navigate({ to: `/monologues/${indexList[currentIdx - 1].id}` });
     } else if (indexList.length > 0) {
       navigate({
         to: `/monologues?id=${indexList[indexList.length - 1].id}`,
@@ -77,7 +68,7 @@ const MonologueDetail = () => {
   const handleNext = () => {
     const currentIdx = indexList.findIndex((e) => e.id === id);
     if (currentIdx !== -1) {
-      navigate({ to: `/monologues?id=${indexList[currentIdx + 1].id}` });
+      navigate({ to: `/monologues/${indexList[currentIdx + 1].id}` });
     }
   };
 
@@ -103,14 +94,6 @@ const MonologueDetail = () => {
       <Dots variant="v3" size="40" color="white" />;{" "}
     </div>
   </div>;
-
-  if (!id) {
-    return (
-      <div className="size-full flex items-center justify-center ">
-        <div className="text-white text-2xl">Monologue not found</div>
-      </div>
-    );
-  }
 
   const currentIdx = indexList.findIndex((e) => e.id === id);
 

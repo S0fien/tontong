@@ -27,6 +27,8 @@ interface AppState {
   sidebarOpen: boolean;
   toggleSidebar: () => void;
 
+  lastMonologue: string | null;
+  setLastMonologue: (index: string) => void;
   user: User | null;
   setUser: (user: User | null) => void;
 }
@@ -55,6 +57,8 @@ export const useAppStore = create<AppState>()(
         }),
       clearHistory: () => set({ history: [] }),
 
+      lastMonologue: null,
+      setLastMonologue: (index) => set({ lastMonologue: index }),
       // UI state
       sidebarOpen: true,
       toggleSidebar: () =>

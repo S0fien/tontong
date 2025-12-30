@@ -49,14 +49,32 @@ export const indexRoute = new Route({
 // export const monologuesRoute = new Route({
 //   getParentRoute: () => rootRoute,
 //   path: "/monologues",
-//   component: Monologue,
+//   component: () => {
+//     const {
+//       indexList,
+//       itemsCache,
+//       loadItem,
+//       setCurrentEntry,
+//       loadingIndex,
+//       currentEntry,
+//       loadingItemId,
+//     } = useOutputIndex();
+
+//     alert("lol", currentEntry);
+
+//     return (
+//       <>
+//         <p>ol</p>
+//       </>
+//     );
+//   },
 // });
 
 // Individual monologue detail route
 export const monologueDetailRoute = new Route({
   getParentRoute: () => rootRoute,
 
-  path: "/monologues",
+  path: "/monologues/$id",
   component: MonologueDetail,
 });
 

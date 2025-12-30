@@ -3,11 +3,11 @@ import {
   BookOpen,
   CheckCircle,
   ChevronRight,
-  Loader,
   Play,
   Volume2,
 } from "lucide-react";
 import { useRef, useState } from "react";
+import { Loader } from "../components/Loader";
 import {
   Accordion,
   AccordionItem,
