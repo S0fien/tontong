@@ -55,6 +55,7 @@ export const indexRoute = new Route({
 // Individual monologue detail route
 export const monologueDetailRoute = new Route({
   getParentRoute: () => rootRoute,
+
   path: "/monologues",
   component: MonologueDetail,
 });

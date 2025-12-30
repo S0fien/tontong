@@ -227,6 +227,7 @@ const Dots_v5 = (props: DotsProps) => {
   return (
     <div className="relative size-20 border" {...props}>
       {[...Array(dots)].map((_, i) => {
+        console.log("i", i);
         const angle = (i / dots) * (2 * Math.PI);
         const x = radius * Math.cos(angle);
         const y = radius * Math.sin(angle);

@@ -1,7 +1,6 @@
 import { useLocation, useRouter } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Loader } from "../components/Loader";
 import Phonograph from "../components/Phonograph";
 import { Card } from "../components/ui/Card";
 import { CardBody } from "../components/ui/CardBody";
@@ -42,8 +41,7 @@ const MonologueDetail = () => {
     if (!loadingIndex)
       setCurrentEntry(indexList.find((item) => item.id === id) || indexList[0]);
   }, [id, indexList, loadingIndex, setCurrentEntry]);
-  if (loadingIndex || !indexList[0])
-    return <Dots variant="v3" size="40" color="white" />;
+
   if (!params.id && indexList[0] && !loadingIndex)
     return navigate({
       to: `/monologues?id=` + indexList[0].id,
@@ -99,20 +97,20 @@ const MonologueDetail = () => {
     setIsPlaying(false);
   };
 
+  if (loadingIndex || !indexList[0]) return;
+  <div className="size-full flex items-center justify-center ">
+    <div className="text-white text-2xl">
+      <Dots variant="v3" size="40" color="white" />;{" "}
+    </div>
+  </div>;
+
   if (!id) {
     return (
       <div className="size-full flex items-center justify-center ">
         <div className="text-white text-2xl">Monologue not found</div>
       </div>
     );
-  } else if (!currentCard)
-    return (
-      <div className="size-full flex items-center justify-center ">
-        <div className="text-white text-2xl">
-          <Loader />
-        </div>
-      </div>
-    );
+  }
 
   const currentIdx = indexList.findIndex((e) => e.id === id);
 
@@ -158,7 +156,7 @@ const MonologueDetail = () => {
         }
         body={<CardBody />}
         isLoading={!currentEntry}
-        loadingItemId={currentCard.id ?? ""}
+        loadingItemId={currentCard?.id ?? ""}
         currentCard={currentCard}
       ></Card>
 

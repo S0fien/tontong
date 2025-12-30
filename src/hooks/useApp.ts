@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import JSZip from "jszip";
 import { useEffect, useState } from "react";
 import { ASSETS_BUCKETS } from "../constants";
 import type { CardType } from "../interfaces";
@@ -91,9 +92,18 @@ export function useOutputIndex() {
     async function loadIndex() {
       try {
         const jo = await supabase.storage.from(ASSETS_BUCKETS);
-        const { data } = await jo.getPublicUrl("index.json");
+        const { data } = await jo.getPublicUrl("index.json.zip");
         const truc = await fetch(data.publicUrl!, { method: "GET" });
-        const index = await truc.json();
+        const new_zip = new JSZip();
+        const blob = await truc.blob();
+        const lala = await new_zip.loadAsync(blob);
+        const jsonFile = lala.file("index.json");
+        if (!jsonFile) {
+          console.error("no jsonfile");
+          throw new Error("aaaarg");
+        }
+        const content = await jsonFile.async("text");
+        const index = JSON.parse(content);
         if (!mounted) return;
         setIndexList(index || []);
         setLoadingIndex(false);
