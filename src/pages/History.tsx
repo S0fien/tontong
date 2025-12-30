@@ -54,12 +54,10 @@ export default function History() {
     setIsPlaying(false);
   };
 
-  if (loadingIndex) return <Loader />;
+  if (loadingIndex) return <Loader color="white" />;
 
   return (
     <div className="w-[900px] max-w-[70wh] flex flex-col gap-4">
-      <div className="h-2 bg-linear-to-r from-purple-600 to-purple-700"></div>
-
       {/* Controls */}
 
       <div className="bg-gray-50">
@@ -163,7 +161,7 @@ export default function History() {
         {/* Purple accent bar */}
 
         {/* Entries */}
-        <div className="max-h-[500px] max-w-10xl w-full mx-auto p-6 space-y-6 overflow-auto">
+        <div className="max-w-10xl w-full mx-auto p-6 space-y-6 overflow-auto">
           {loadingIndex && (
             <div>
               <Loader />

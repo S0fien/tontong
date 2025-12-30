@@ -75,6 +75,8 @@ export const monologueDetailRoute = new Route({
   getParentRoute: () => rootRoute,
 
   path: "/monologues/$id",
+  loader: () => <h1>loli</h1>,
+
   component: MonologueDetail,
 });
 

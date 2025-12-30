@@ -19,13 +19,13 @@ export const CardFooter = ({
   const { className } = childs;
   console.log("classnale", className);
   return (
-    <div className="bg-purple-100/50 p-1 h-max-22 flex relative justify-end items-center">
+    <div className="bg-purple-100/50 px-1 pt-1 pb-10 h-max-22 flex relative justify-end items-center">
       {!isLoading && (
         <>
           <button
             disabled={isLoading}
             onClick={onFlip}
-            className="absolute right-2 text-purple-400 hover:text-purple-600 transition p-2 mr-3"
+            className="absolute top-0 right-2 text-purple-400 hover:text-purple-600 transition p-2 mr-3"
             aria-label="Flip card"
           >
             <RotateCcw className="w-6 h-6" />

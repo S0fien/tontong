@@ -1,11 +1,11 @@
 import { useParams, useRouter } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Loader } from "../components/Loader";
 import Phonograph from "../components/Phonograph";
 import { Card } from "../components/ui/Card";
 import { CardBody } from "../components/ui/CardBody";
 import { CardFooter } from "../components/ui/CardFooter";
-import { Dots } from "../components/ui/Spinner";
 import useOutputIndex from "../hooks/useApp";
 import type { CardType } from "../interfaces";
 const MonologueDetail = () => {
@@ -88,12 +88,7 @@ const MonologueDetail = () => {
     setIsPlaying(false);
   };
 
-  if (loadingIndex || !indexList[0]) return;
-  <div className="size-full flex items-center justify-center ">
-    <div className="text-white text-2xl">
-      <Dots variant="v3" size="40" color="white" />;{" "}
-    </div>
-  </div>;
+  if (!currentEntry) return <Loader color="white" />;
 
   const currentIdx = indexList.findIndex((e) => e.id === id);
 
